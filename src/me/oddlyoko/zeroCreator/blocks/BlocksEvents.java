@@ -1,0 +1,71 @@
+package me.oddlyoko.zeroCreator.blocks;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import me.oddlyoko.zeroCreator.composant.ComposantBasicText;
+import me.oddlyoko.zeroCreator.composant.IComposant;
+import me.oddlyoko.zeroCreator.gui.InternalGUIFrame;
+import me.oddlyoko.zeroCreator.gui.blocks.BlocksEventUI;
+
+public class BlocksEvents implements IBlocksNext {
+	private InternalGUIFrame internalGUIFrame;
+	private IComposant[] composants = new IComposant[1];
+
+	private IBlocksPrevious next = null;
+
+	public BlocksEvents(String title) {
+		ComposantBasicText cbt = new ComposantBasicText(title);
+		cbt.setX(10);
+		cbt.setY(2);
+		composants[0] = cbt;
+		internalGUIFrame = new BlocksEventUI(this);
+	}
+
+	public BlocksEvents(int x, int y) {
+		internalGUIFrame = new BlocksEventUI(this, x, y);
+	}
+
+	@Override
+	public InternalGUIFrame getInternalGUIFrame() {
+		return internalGUIFrame;
+	}
+
+	@Override
+	public void move(int x, int y) {
+		getInternalGUIFrame().setLocation(x, y);
+		if (next != null) {
+			next.move(getInternalGUIFrame().getX(),
+					getInternalGUIFrame().getY() + getInternalGUIFrame().getTotalHeight());
+		}
+	}
+
+	@Override
+	public List<IBlocks> getBlocks() {
+		List<IBlocks> list = new ArrayList<>();
+		list.add(next);
+		return list;
+	}
+
+	@Override
+	public void setNext(IBlocksPrevious next) {
+		if (next == null)
+			this.next = null;
+		else if (next instanceof BlocksInstruction) {
+			this.next = next;
+			next.setPrevious(this);
+			next.move(getInternalGUIFrame().getX(),
+					getInternalGUIFrame().getY() + getInternalGUIFrame().getTotalHeight());
+		}
+	}
+
+	@Override
+	public IBlocksPrevious getNext() {
+		return next;
+	}
+
+	@Override
+	public IComposant[] getComposantList() {
+		return composants;
+	}
+}
