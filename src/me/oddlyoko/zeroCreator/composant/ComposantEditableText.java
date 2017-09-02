@@ -1,9 +1,12 @@
 package me.oddlyoko.zeroCreator.composant;
 
+import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 
-public class ComposantBasicText implements IComposant {
+import javax.swing.JOptionPane;
+
+public class ComposantEditableText implements IComposant {
 	private int x = 0;
 	private int y = 0;
 	private int width = 0;
@@ -12,7 +15,7 @@ public class ComposantBasicText implements IComposant {
 	private String oldTxt = "";
 	private String txt = "";
 
-	public ComposantBasicText(String txt) {
+	public ComposantEditableText(String txt) {
 		this.oldTxt = txt;
 		this.txt = txt;
 	}
@@ -47,10 +50,14 @@ public class ComposantBasicText implements IComposant {
 		if (fm != g2d.getFontMetrics() || !oldTxt.equalsIgnoreCase(txt)) {
 			fm = g2d.getFontMetrics();
 			oldTxt = txt;
-			width = fm.stringWidth(txt);
-			height = fm.getHeight();
+			width = fm.stringWidth(txt) + 5;
+			height = fm.getHeight() + 5;
 		}
-		g2d.drawString(txt, x, y + getHeight());
+		Color c = g2d.getColor();
+		g2d.setColor(Color.WHITE);
+		g2d.fillRect(x, y, width, height);
+		g2d.setColor(c);
+		g2d.drawString(txt, x + 2, y + fm.getHeight());
 	}
 
 	@Override
@@ -73,16 +80,20 @@ public class ComposantBasicText implements IComposant {
 
 	@Override
 	public boolean isEditable() {
-		return false;
+		return true;
 	}
 
 	@Override
 	public void onClick() {
-		// System.out.println("Clicked BasicText: " + txt);
+		String result = JOptionPane.showInputDialog(null, "Please Enter new value: ");
+		if (result != null) {
+			txt = result;
+		}
+		// System.out.println("Clicked EditableText: " + txt);
 	}
 
 	@Override
 	public void onHover() {
-		// System.out.println("Hover BasicText: " + txt);
+		// System.out.println("Hover EditableText: " + txt);
 	}
 }

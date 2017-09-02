@@ -3,19 +3,24 @@ package me.oddlyoko.zeroCreator.blocks;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.oddlyoko.zeroCreator.composant.ComposantEditableText;
 import me.oddlyoko.zeroCreator.composant.IComposant;
 import me.oddlyoko.zeroCreator.gui.InternalGUIFrame;
 import me.oddlyoko.zeroCreator.gui.blocks.BlocksFinalUI;
 
-public class BlocksFinal implements IBlocks {
+public class BlocksFinal extends Block implements ICustomBlocks {
 	private InternalGUIFrame internalGUIFrame;
-	private IComposant[] composants = new IComposant[0];
+	private IComposant[] composants = new IComposant[1];
 
-	public BlocksFinal() {
-		internalGUIFrame = new BlocksFinalUI(this);
+	public BlocksFinal(String defvalue) {
+		this(defvalue, 20, 20);
 	}
 
-	public BlocksFinal(int x, int y) {
+	public BlocksFinal(String defvalue, int x, int y) {
+		ComposantEditableText cet = new ComposantEditableText(defvalue);
+		cet.setX(13);
+		cet.setY(2);
+		composants[0] = cet;
 		internalGUIFrame = new BlocksFinalUI(this, x, y);
 	}
 
@@ -25,7 +30,7 @@ public class BlocksFinal implements IBlocks {
 	}
 
 	@Override
-	public List<IBlocks> getBlocks() {
+	public List<ICustomBlocks> getBlocks() {
 		return new ArrayList<>();
 	}
 
@@ -37,5 +42,10 @@ public class BlocksFinal implements IBlocks {
 	@Override
 	public IComposant[] getComposantList() {
 		return composants;
+	}
+
+	@Override
+	public IBlocks getBlock() {
+		return this;
 	}
 }

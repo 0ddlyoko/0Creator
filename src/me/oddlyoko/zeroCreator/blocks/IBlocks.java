@@ -8,11 +8,17 @@ import me.oddlyoko.zeroCreator.gui.InternalGUIFrame;
 public interface IBlocks {
 	public InternalGUIFrame getInternalGUIFrame();
 
-	public List<IBlocks> getBlocks();
+	public List<ICustomBlocks> getBlocks();
 
 	public void move(int x, int y);
 
 	public IComposant[] getComposantList();
+
+	public void onHover();
+
+	public void onClick();
+
+	public void onPress();
 
 	public default void resize(int width, int height) {
 		getInternalGUIFrame().setSize(width, height);

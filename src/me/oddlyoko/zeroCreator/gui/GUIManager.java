@@ -1,5 +1,7 @@
 package me.oddlyoko.zeroCreator.gui;
 
+import me.oddlyoko.zeroCreator.gui.popup.GUIPopUpResult;
+
 public class GUIManager {
 	private static MainGUI mainGUI = null;
 
@@ -13,5 +15,10 @@ public class GUIManager {
 		if (mainGUI == null)
 			mainGUI = new MainGUI();
 		mainGUI.setVisible(true);
+	}
+
+	public static Object askPopUp(GUIPopUpResult popup) {
+		// TODO END HERE
+		return null;
 	}
 }

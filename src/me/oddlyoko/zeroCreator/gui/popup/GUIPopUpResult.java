@@ -8,14 +8,17 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-public class GUIPopUpResult extends JDialog {
+public abstract class GUIPopUpResult extends JDialog {
+	private static final long serialVersionUID = 1L;
+
+	private Object result;
 
 	private final JPanel contentPanel = new JPanel();
 
 	/**
 	 * Create the dialog.
 	 */
-	public GUIPopUpResult(String message) {
+	public GUIPopUpResult() {
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setLayout(new FlowLayout());
@@ -36,4 +39,11 @@ public class GUIPopUpResult extends JDialog {
 		buttonPane.add(cancelButton);
 	}
 
+	public void setResult(Object result) {
+		this.result = result;
+	}
+
+	public Object getResult() {
+		return result;
+	}
 }

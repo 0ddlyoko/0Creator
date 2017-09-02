@@ -91,14 +91,15 @@ public class BlocksInstructionUI extends InternalGUIFrame {
 
 	@Override
 	public int getTotalWidth() {
-		int width = 40 + (block.getChildren() == null ? 0 : block.getChildren().getInternalGUIFrame().getTotalWidth());
+		int width = 40 + (block.getChildren() == null ? 0
+				: block.getChildren().getBlock().getInternalGUIFrame().getTotalWidth());
 		return Math.max(MINWIDTH, width);
 	}
 
 	@Override
 	public int getTotalHeight() {
 		int height = 35 + (block.getChildren() == null ? 0
-				: block.getChildren().getInternalGUIFrame().getTotalHeightWithNextElement());
+				: block.getChildren().getBlock().getInternalGUIFrame().getTotalHeightWithNextElement());
 		return Math.max(MINHEIGHT + heightIndicator, height) + (block.isEnd() ? 0 : heightIndicator);
 	}
 
@@ -108,7 +109,7 @@ public class BlocksInstructionUI extends InternalGUIFrame {
 		int nextHeight = 0;
 		if (!block.isEnd())
 			nextHeight = block.getNext() == null ? 0
-					: block.getNext().getInternalGUIFrame().getTotalHeightWithNextElement();
+					: block.getNext().getBlock().getInternalGUIFrame().getTotalHeightWithNextElement();
 		return totalHeight + nextHeight;
 	}
 

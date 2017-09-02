@@ -12,7 +12,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import me.oddlyoko.zeroCreator.blocks.Block;
 import me.oddlyoko.zeroCreator.blocks.BlocksEvents;
+import me.oddlyoko.zeroCreator.blocks.BlocksFinal;
 import me.oddlyoko.zeroCreator.blocks.BlocksInstruction;
 import me.oddlyoko.zeroCreator.blocks.IBlocks;
 import me.oddlyoko.zeroCreator.blocks.IBlocksPrevious;
@@ -49,6 +51,24 @@ public class MainGUI extends JFrame implements MouseListener, MouseMotionListene
 		add(bi2);
 		BlocksInstruction bi3 = new BlocksInstruction("bi3");
 		add(bi3);
+		BlocksFinal bf1 = new BlocksFinal("0ddlyoko");
+		bf1.move(getWidth() / 2, 50);
+		BlocksFinal bf2 = new BlocksFinal("C'est");
+		bf2.move(getWidth() / 2, 70);
+		BlocksFinal bf3 = new BlocksFinal("Un");
+		bf3.move(getWidth() / 2, 90);
+		BlocksFinal bf4 = new BlocksFinal("Developpeur");
+		bf4.move(getWidth() / 2, 110);
+		BlocksFinal bf5 = new BlocksFinal("En");
+		bf5.move(getWidth() / 2, 130);
+		BlocksFinal bf6 = new BlocksFinal("Mousse");
+		bf6.move(getWidth() / 2, 150);
+		add(bf1);
+		add(bf2);
+		add(bf3);
+		add(bf4);
+		add(bf5);
+		add(bf6);
 		bi3.setEnd(true);
 		be1.setNext(bi1);
 		bi1.setChildren(bi11);
@@ -74,46 +94,68 @@ public class MainGUI extends JFrame implements MouseListener, MouseMotionListene
 		g2d.drawRoundRect(getX(), getY(), getWidth(), getHeight(), 5, 5);
 	}
 
+	private Block blockHover = null;
+	private Block blockPressed = null;
+	private Block blockClicked = null;
+
 	@Override
-	public void mouseDragged(MouseEvent e) {
-		if (blockClicked != null) {
-			if (blockClicked instanceof IBlocksPrevious) {
-				IBlocksPrevious ibp = (IBlocksPrevious) blockClicked;
+	public void mouseDragged(MouseEvent e) { // TODO REWRITE THIS IN ANOTHER
+												// CLASS
+		if (blockHover != null) {
+			if (blockHover instanceof IBlocksPrevious) {
+				IBlocksPrevious ibp = (IBlocksPrevious) blockHover;
 				if (ibp.getPrevious() != null)
 					ibp.getPrevious().setNext(null);
 				ibp.setPrevious(null);
 			}
-			blockClicked.move(e.getX(), e.getY());
+			blockHover.move(e.getX(), e.getY());
 		}
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		if (blockHover != null)
-			blockHover.getInternalGUIFrame().setHover(false);
-		blockHover = getBlockAt(e.getX(), e.getY());
-		if (blockHover != null)
-			blockHover.getInternalGUIFrame().setHover(true);
+		if (blockHover != null) {
+			blockHover.setHover(false, 0, 0);
+			blockHover = null;
+		}
+		IBlocks b = getBlockAt(e.getX(), e.getY());
+		if (b != null && b instanceof Block) {
+			blockHover = (Block) b;
+			blockHover.setHover(true, e.getX() - b.getInternalGUIFrame().getX(),
+					e.getY() - b.getInternalGUIFrame().getY());
+			blockHover.onHover();
+		}
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
+		if (blockClicked != null) {
+			blockClicked.setClick(false, 0, 0);
+			blockClicked = null;
+		}
+		IBlocks b = getBlockAt(e.getX(), e.getY());
+		if (b != null && b instanceof Block) {
+			blockClicked = (Block) b;
+			blockClicked.setClick(true, e.getX() - b.getInternalGUIFrame().getX(),
+					e.getY() - b.getInternalGUIFrame().getY());
+			blockClicked.onClick();
+			System.out.println("Click: " + blockClicked);
+		}
 	}
-
-	private boolean click = false;
-	private boolean hover = false;
-	private IBlocks blockClicked = null;
-	private IBlocks blockHover = null;
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		click = true;
-		if (blockClicked != null)
-			blockClicked.getInternalGUIFrame().setSelected(false);
-		blockClicked = getBlockAt(e.getX(), e.getY());
-		if (blockClicked != null) {
-			blockClicked.getInternalGUIFrame().setSelected(true);
-			System.out.println("Clicked: " + blockClicked);
+		if (blockPressed != null) {
+			blockPressed.setPress(false, 0, 0);
+			blockPressed = null;
+		}
+		IBlocks b = getBlockAt(e.getX(), e.getY());
+		if (b != null && b instanceof Block) {
+			blockPressed = (Block) b;
+			blockPressed.setPress(true, e.getX() - b.getInternalGUIFrame().getX(),
+					e.getY() - b.getInternalGUIFrame().getY());
+			blockPressed.onPress();
+			System.out.println("Pressed: " + blockPressed);
 		}
 	}
 
@@ -137,7 +179,10 @@ public class MainGUI extends JFrame implements MouseListener, MouseMotionListene
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		click = false;
+		if (blockPressed != null) {
+			blockPressed.setPress(false, 0, 0);
+			blockPressed = null;
+		}
 	}
 
 	@Override

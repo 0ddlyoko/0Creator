@@ -70,7 +70,7 @@ public class BlocksEventUI extends InternalGUIFrame {
 
 	@Override
 	public int getTotalWidth() {
-		int width = (block.getNext() == null ? 0 : block.getNext().getInternalGUIFrame().getTotalWidth());
+		int width = (block.getNext() == null ? 0 : block.getNext().getBlock().getInternalGUIFrame().getTotalWidth());
 		return Math.max(MINWIDTH, width);
 	}
 
@@ -82,7 +82,7 @@ public class BlocksEventUI extends InternalGUIFrame {
 	@Override
 	public int getTotalHeightWithNextElement() {
 		int height = (block.getNext() == null ? 0
-				: block.getNext().getInternalGUIFrame().getTotalHeightWithNextElement());
+				: block.getNext().getBlock().getInternalGUIFrame().getTotalHeightWithNextElement());
 		return getTotalHeight() + height;
 	}
 
