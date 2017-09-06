@@ -22,7 +22,8 @@ public class BlocksInstruction extends Block implements IBlocksNext, IBlocksPrev
 		internalGUIFrame = new BlocksInstructionUI(this);
 	}
 
-	public BlocksInstruction(int x, int y) {
+	public BlocksInstruction(String name, int x, int y) {
+		this.name = name;
 		internalGUIFrame = new BlocksInstructionUI(this, x, y);
 	}
 

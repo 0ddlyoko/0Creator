@@ -1,4 +1,4 @@
-package me.oddlyoko.zeroCreator.composant;
+package me.oddlyoko.zeroCreator.composant.editable;
 
 import java.awt.Color;
 import java.awt.FontMetrics;
@@ -6,18 +6,21 @@ import java.awt.Graphics2D;
 
 import javax.swing.JOptionPane;
 
-public class ComposantEditableText implements IComposant {
+import me.oddlyoko.zeroCreator.composant.IComposant;
+
+public abstract class ComposantEditable implements IComposant {
 	private int x = 0;
 	private int y = 0;
 	private int width = 0;
 	private int height = 0;
+	private Color fontColor = Color.WHITE;
 	private FontMetrics fm = null;
-	private String oldTxt = "";
-	private String txt = "";
+	private Object oldObj = "";
+	private Object obj = "";
 
-	public ComposantEditableText(String txt) {
-		this.oldTxt = txt;
-		this.txt = txt;
+	public ComposantEditable(Object obj) {
+		this.oldObj = obj;
+		this.obj = obj;
 	}
 
 	@Override
@@ -47,17 +50,17 @@ public class ComposantEditableText implements IComposant {
 
 	@Override
 	public void draw(Graphics2D g2d) {
-		if (fm != g2d.getFontMetrics() || !oldTxt.equalsIgnoreCase(txt)) {
+		if (fm != g2d.getFontMetrics() || !oldObj.equals(obj)) {
 			fm = g2d.getFontMetrics();
-			oldTxt = txt;
-			width = fm.stringWidth(txt) + 5;
+			oldObj = obj;
+			width = fm.stringWidth(obj.toString()) + 5;
 			height = fm.getHeight() + 5;
 		}
 		Color c = g2d.getColor();
-		g2d.setColor(Color.WHITE);
+		g2d.setColor(fontColor);
 		g2d.fillRect(x, y, width, height);
 		g2d.setColor(c);
-		g2d.drawString(txt, x + 2, y + fm.getHeight());
+		g2d.drawString(obj.toString(), x + 2, y + fm.getHeight());
 	}
 
 	@Override
@@ -70,12 +73,12 @@ public class ComposantEditableText implements IComposant {
 		this.y = y;
 	}
 
-	public void setText(String txt) {
-		this.txt = txt;
+	public void setObject(Object obj) {
+		this.obj = obj;
 	}
 
-	public String getText() {
-		return txt;
+	public Object getObject() {
+		return obj;
 	}
 
 	@Override
@@ -87,7 +90,7 @@ public class ComposantEditableText implements IComposant {
 	public void onClick() {
 		String result = JOptionPane.showInputDialog(null, "Please Enter new value: ");
 		if (result != null) {
-			txt = result;
+			setObject(result);
 		}
 		// System.out.println("Clicked EditableText: " + txt);
 	}
@@ -95,5 +98,9 @@ public class ComposantEditableText implements IComposant {
 	@Override
 	public void onHover() {
 		// System.out.println("Hover EditableText: " + txt);
+	}
+
+	public void setFontColor(Color c) {
+		fontColor = c;
 	}
 }

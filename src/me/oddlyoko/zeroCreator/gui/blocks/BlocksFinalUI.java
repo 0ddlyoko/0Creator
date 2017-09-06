@@ -4,8 +4,8 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.GeneralPath;
 
-import me.oddlyoko.zeroCreator.blocks.BlocksFinal;
 import me.oddlyoko.zeroCreator.blocks.IBlocks;
+import me.oddlyoko.zeroCreator.blocks.finalblocks.BlocksFinal;
 import me.oddlyoko.zeroCreator.composant.IComposant;
 import me.oddlyoko.zeroCreator.gui.InternalGUIFrame;
 
