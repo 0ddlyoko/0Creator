@@ -3,7 +3,7 @@ package me.oddlyoko.zeroCreator;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Parameters {
+public class Parameters { // TODO WHY DID I CREATE THIS CLASS ???? REMOVE IT ?
 	private Map<String, Object> maps = new HashMap<>();
 
 	public void set(String key, Object value) {

@@ -1,54 +1,59 @@
 package me.oddlyoko.zeroCreator.gui;
 
+import me.oddlyoko.zeroCreator.Project;
 import me.oddlyoko.zeroCreator.gui.frame.AboutGUI;
 import me.oddlyoko.zeroCreator.gui.frame.InformationGUI;
 import me.oddlyoko.zeroCreator.gui.frame.MainGUI;
 import me.oddlyoko.zeroCreator.gui.popup.GUIPopUpResult;
 
 public class GUIManager {
-	private static MainGUI mainGUI = null;
-	private static InformationGUI informationGUI = null;
+	private Project project = null;
+	private MainGUI mainGUI = null;
+	private InformationGUI informationGUI = null;
+	private AboutGUI aboutGUI = null;
 
-	private static AboutGUI aboutGUI = null;
+	public GUIManager(Project project) {
+		this.project = project;
+	}
 
-	public static MainGUI getMainGUI() {
-		if (mainGUI == null)
-			mainGUI = new MainGUI();
+	public void init() {
+		mainGUI = new MainGUI(project);
+		informationGUI = new InformationGUI(project);
+		aboutGUI = new AboutGUI(project);
+	}
+
+	public MainGUI getMainGUI() {
 		return mainGUI;
 	}
 
-	public static void showMainGUI() {
-		if (mainGUI == null)
-			mainGUI = new MainGUI();
+	public void showMainGUI() {
 		mainGUI.setVisible(true);
 	}
 
-	public static InformationGUI getInformationGUI() {
-		if (informationGUI == null)
-			informationGUI = new InformationGUI();
+	public InformationGUI getInformationGUI() {
 		return informationGUI;
 	}
 
-	public static void showInformationGUI() {
-		if (informationGUI == null)
-			informationGUI = new InformationGUI();
+	public void showInformationGUI() {
 		informationGUI.setVisible(true);
 	}
 
-	public static AboutGUI getAboutGUI() {
-		if (aboutGUI == null)
-			aboutGUI = new AboutGUI();
+	public AboutGUI getAboutGUI() {
 		return aboutGUI;
 	}
 
-	public static void showAboutGUI() {
-		if (aboutGUI == null)
-			aboutGUI = new AboutGUI();
+	public void showAboutGUI() {
 		aboutGUI.setVisible(true);
 	}
 
-	public static Object askPopUp(GUIPopUpResult popup) {
+	public Object askPopUp(GUIPopUpResult popup) {
 		// TODO END HERE
 		return null;
+	}
+
+	public void close() {
+		mainGUI.dispose();
+		informationGUI.dispose();
+		aboutGUI.dispose();
 	}
 }

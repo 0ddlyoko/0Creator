@@ -11,8 +11,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import me.oddlyoko.zeroCreator.Project;
+
 public class AboutGUI extends JDialog {
 	private static final long serialVersionUID = 1L;
+	private Project project = null;
 
 	private JPanel contentPanel;
 	private JPanel buttonPanel;
@@ -22,7 +25,8 @@ public class AboutGUI extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public AboutGUI() {
+	public AboutGUI(Project project) {
+		this.project = project;
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		setResizable(false);

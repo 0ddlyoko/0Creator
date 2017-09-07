@@ -1,52 +1,28 @@
 package me.oddlyoko.zeroCreator;
 
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
-import me.oddlyoko.zeroCreator.gui.GUIManager;
-import me.oddlyoko.zeroCreator.gui.frame.InformationGUI;
-
 public class ZeroCreator {
-	private PluginInformation pluginInformation = null;
-	private Object LOCK = new Object();
-	private boolean lock1 = true;
+	private static Project project = null;
 
-	public ZeroCreator() {
-		InformationGUI igui = GUIManager.getInformationGUI();
-		GUIManager.showInformationGUI();
-		igui.addWindowListener(new WindowAdapter() { // Event when
-														// InformationGUI is
-														// Closed
-			@Override
-			public void windowClosed(WindowEvent e) {
-				lock1 = false;
-				synchronized (LOCK) {
-					LOCK.notifyAll();
-				}
-			}
-		});
-		synchronized (LOCK) { // Need to synchonize because
-								// while(igui.isVisible()){} is bugged
-			while (lock1) {
-				try {
-					LOCK.wait();
-				} catch (InterruptedException ex) {
-					break;
-				}
-			}
-		}
-		// testPopUp();
-		pluginInformation = new PluginInformation(igui.getPluginName(), igui.getAuthor(), igui.getPluginVersion());
-		GUIManager.getMainGUI().setTitle("0Creator ~ " + pluginInformation.getAuthor() + " : "
-				+ pluginInformation.getPluginName() + " (v" + pluginInformation.getPluginVersion() + ")");
-		GUIManager.showMainGUI();
+	public static void main(String[] args) {
+		createNewProject();
 	}
 
-	public PluginInformation getPluginInformation() {
-		return pluginInformation;
+	public static void createNewProject() {
+		setProject(new Project());
+	}
+
+	public static void setProject(Project project) {
+		if (ZeroCreator.project != null)
+			ZeroCreator.project.close();
+		ZeroCreator.project = project;
+		ZeroCreator.project.getGUIManager().showMainGUI();
+	}
+
+	public static Project getProject() {
+		return project;
 	}
 
 	private void testPopUp() {
@@ -57,9 +33,5 @@ public class ZeroCreator {
 		// pane.selectInitialValue();
 		dialog.show();
 		dialog.dispose();
-	}
-
-	public static void main(String[] args) {
-		new ZeroCreator();
 	}
 }

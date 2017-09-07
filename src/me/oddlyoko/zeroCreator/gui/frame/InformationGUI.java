@@ -1,6 +1,5 @@
 package me.oddlyoko.zeroCreator.gui.frame;
 
-import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -13,8 +12,11 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import me.oddlyoko.zeroCreator.Project;
+
 public class InformationGUI extends JDialog {
 	private static final long serialVersionUID = 1L;
+	private Project project = null;
 
 	private JPanel contentPane;
 	private JLabel lblPluginName;
@@ -28,7 +30,8 @@ public class InformationGUI extends JDialog {
 	/**
 	 * Create the frame.
 	 */
-	public InformationGUI() {
+	public InformationGUI(Project project) {
+		this.project = project;
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
@@ -64,7 +67,7 @@ public class InformationGUI extends JDialog {
 		contentPane.add(txtFldPluginVersion);
 		txtFldPluginVersion.setColumns(10);
 
-		btnCreate = new JButton("Create");
+		btnCreate = new JButton("Finish");
 		btnCreate.setBounds(169, 237, 105, 23);
 		contentPane.add(btnCreate);
 		btnCreate.addActionListener(new ActionListener() {
@@ -107,21 +110,5 @@ public class InformationGUI extends JDialog {
 
 	public void setPluginVersion(String pluginVersion) {
 		txtFldPluginVersion.setText(pluginVersion);
-	}
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					InformationGUI frame = new InformationGUI();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
 	}
 }
