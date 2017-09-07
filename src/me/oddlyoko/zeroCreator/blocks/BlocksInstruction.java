@@ -8,7 +8,7 @@ import me.oddlyoko.zeroCreator.gui.InternalGUIFrame;
 import me.oddlyoko.zeroCreator.gui.blocks.BlocksInstructionUI;
 
 public class BlocksInstruction extends Block implements IBlocksNext, IBlocksPrevious {
-	private String name;
+	private final String NAME = "Instruction";
 	private InternalGUIFrame internalGUIFrame;
 	private boolean end = false;
 	private IComposant[] composants = new IComposant[0];
@@ -17,13 +17,11 @@ public class BlocksInstruction extends Block implements IBlocksNext, IBlocksPrev
 	private IBlocksPrevious next = null;
 	private IBlocksNext previous = null;
 
-	public BlocksInstruction(String name) {
-		this.name = name;
+	public BlocksInstruction() {
 		internalGUIFrame = new BlocksInstructionUI(this);
 	}
 
-	public BlocksInstruction(String name, int x, int y) {
-		this.name = name;
+	public BlocksInstruction(int x, int y) {
 		internalGUIFrame = new BlocksInstructionUI(this, x, y);
 	}
 
@@ -111,5 +109,10 @@ public class BlocksInstruction extends Block implements IBlocksNext, IBlocksPrev
 	@Override
 	public IBlocks getBlock() {
 		return this;
+	}
+
+	@Override
+	public String getName() {
+		return NAME;
 	}
 }

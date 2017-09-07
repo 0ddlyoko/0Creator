@@ -20,6 +20,8 @@ public interface IBlocks {
 
 	public void onPress();
 
+	public String getName();
+
 	public default void resize(int width, int height) {
 		getInternalGUIFrame().setSize(width, height);
 	}

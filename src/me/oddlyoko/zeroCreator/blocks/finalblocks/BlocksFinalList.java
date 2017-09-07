@@ -5,6 +5,7 @@ import java.util.List;
 import me.oddlyoko.zeroCreator.composant.editable.ComposantEditableList;
 
 public class BlocksFinalList extends BlocksFinal {
+	private final String NAME = "Final List";
 
 	public BlocksFinalList(Object defvalue) {
 		this(defvalue, 13, 2);
@@ -28,5 +29,10 @@ public class BlocksFinalList extends BlocksFinal {
 
 	public List<Object> getItems() {
 		return ((ComposantEditableList) getComposant(0)).getItems();
+	}
+
+	@Override
+	public String getName() {
+		return NAME;
 	}
 }

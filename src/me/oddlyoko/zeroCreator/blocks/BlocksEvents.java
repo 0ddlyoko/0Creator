@@ -9,6 +9,7 @@ import me.oddlyoko.zeroCreator.gui.InternalGUIFrame;
 import me.oddlyoko.zeroCreator.gui.blocks.BlocksEventUI;
 
 public class BlocksEvents extends Block implements IBlocksNext {
+	private final String NAME = "Events";
 	private InternalGUIFrame internalGUIFrame;
 	private IComposant[] composants = new IComposant[1];
 
@@ -72,5 +73,10 @@ public class BlocksEvents extends Block implements IBlocksNext {
 	@Override
 	public IBlocks getBlock() {
 		return this;
+	}
+
+	@Override
+	public String getName() {
+		return NAME;
 	}
 }
