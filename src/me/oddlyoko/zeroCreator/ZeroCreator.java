@@ -21,7 +21,7 @@ public class ZeroCreator {
 														// InformationGUI is
 														// Closed
 			@Override
-			public void windowDeactivated(WindowEvent e) {
+			public void windowClosed(WindowEvent e) {
 				lock1 = false;
 				synchronized (LOCK) {
 					LOCK.notifyAll();
