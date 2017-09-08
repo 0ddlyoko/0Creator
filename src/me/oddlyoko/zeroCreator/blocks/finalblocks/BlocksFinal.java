@@ -46,6 +46,14 @@ public abstract class BlocksFinal extends Block implements ICustomBlocks {
 	}
 
 	@Override
+	public void removeBlock(IBlocks b) {
+	}
+
+	@Override
+	public void delete() {
+	}
+
+	@Override
 	public void move(int x, int y) {
 		getInternalGUIFrame().setLocation(x, y);
 	}

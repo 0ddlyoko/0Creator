@@ -10,6 +10,8 @@ public interface IBlocks {
 
 	public List<ICustomBlocks> getBlocks();
 
+	public void removeBlock(IBlocks b);
+
 	public void move(int x, int y);
 
 	public IComposant[] getComposantList();
@@ -21,6 +23,8 @@ public interface IBlocks {
 	public void onPress();
 
 	public String getName();
+
+	public void delete();
 
 	public default void resize(int width, int height) {
 		getInternalGUIFrame().setSize(width, height);

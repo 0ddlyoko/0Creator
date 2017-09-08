@@ -65,6 +65,36 @@ public class BlocksInstruction extends Block implements IBlocksNext, IBlocksPrev
 	}
 
 	@Override
+	public void removeBlock(IBlocks b) {
+		if (children != null && children.getBlock().equals(b)) {
+			children.setPrevious(null);
+			setChildren(null);
+		} else if (next != null && next.getBlock().equals(b)) {
+			next.setPrevious(null);
+			setNext(null);
+		} else if (previous != null && previous.getBlock().equals(b)) {
+			previous.setNext(null);
+			setPrevious(null);
+		}
+	}
+
+	@Override
+	public void delete() {
+		if (children != null) {
+			children.setPrevious(null);
+			setChildren(null);
+		}
+		if (next != null) {
+			next.setPrevious(null);
+			setNext(null);
+		}
+		if (previous != null) {
+			previous.setNext(null);
+			setPrevious(null);
+		}
+	}
+
+	@Override
 	public IBlocksPrevious getNext() {
 		return next;
 	}

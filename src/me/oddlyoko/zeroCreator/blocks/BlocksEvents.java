@@ -49,6 +49,22 @@ public class BlocksEvents extends Block implements IBlocksNext {
 	}
 
 	@Override
+	public void removeBlock(IBlocks b) {
+		if (next != null && next.getBlock().equals(b)) {
+			next.setPrevious(null);
+			setNext(null);
+		}
+	}
+
+	@Override
+	public void delete() {
+		if (next != null) {
+			next.setPrevious(null);
+			setNext(null);
+		}
+	}
+
+	@Override
 	public void setNext(IBlocksPrevious next) {
 		if (next == null)
 			this.next = null;

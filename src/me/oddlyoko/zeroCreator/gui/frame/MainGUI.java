@@ -7,8 +7,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -24,15 +22,8 @@ import javax.swing.border.EmptyBorder;
 import me.oddlyoko.zeroCreator.Project;
 import me.oddlyoko.zeroCreator.ZeroCreator;
 import me.oddlyoko.zeroCreator.blocks.Block;
-import me.oddlyoko.zeroCreator.blocks.BlocksEvents;
-import me.oddlyoko.zeroCreator.blocks.BlocksInstruction;
 import me.oddlyoko.zeroCreator.blocks.IBlocks;
 import me.oddlyoko.zeroCreator.blocks.IBlocksPrevious;
-import me.oddlyoko.zeroCreator.blocks.finalblocks.BlocksFinal;
-import me.oddlyoko.zeroCreator.blocks.finalblocks.BlocksFinalDouble;
-import me.oddlyoko.zeroCreator.blocks.finalblocks.BlocksFinalInteger;
-import me.oddlyoko.zeroCreator.blocks.finalblocks.BlocksFinalList;
-import me.oddlyoko.zeroCreator.blocks.finalblocks.BlocksFinalString;
 import me.oddlyoko.zeroCreator.gui.InternalGUIFrame;
 
 public class MainGUI extends JFrame implements MouseListener, MouseMotionListener, ActionListener {
@@ -58,8 +49,6 @@ public class MainGUI extends JFrame implements MouseListener, MouseMotionListene
 	private JMenuItem mntmHowToUse;
 
 	private JPanel contentPane;
-	private BlocksEvents be1;
-	private List<IBlocks> blocks = new ArrayList<>();
 
 	/**
 	 * Create the frame.
@@ -67,7 +56,6 @@ public class MainGUI extends JFrame implements MouseListener, MouseMotionListene
 	public MainGUI(Project project) {
 		this.project = project;
 		initialize();
-		initializeBlocks(); // TODO: REMOVE IT
 	}
 
 	private void initialize() {
@@ -165,60 +153,6 @@ public class MainGUI extends JFrame implements MouseListener, MouseMotionListene
 		}).start();
 	}
 
-	private void initializeBlocks() {
-		be1 = new BlocksEvents("On Plugin Load");
-		be1.move(10, 10);
-		addBlock(be1);
-		BlocksInstruction bi1 = new BlocksInstruction();
-		BlocksInstruction bi11 = new BlocksInstruction();
-		BlocksInstruction bi2 = new BlocksInstruction();
-		BlocksInstruction bi3 = new BlocksInstruction();
-		addBlock(bi1);
-		addBlock(bi11);
-		addBlock(bi2);
-		addBlock(bi3);
-		BlocksFinal bf1 = new BlocksFinalString("0ddlyoko");
-		BlocksFinal bf2 = new BlocksFinalString("C'est");
-		BlocksFinal bf3 = new BlocksFinalString("Un");
-		BlocksFinal bf4 = new BlocksFinalString("Developpeur");
-		BlocksFinal bf5 = new BlocksFinalString("En");
-		BlocksFinal bf6 = new BlocksFinalString("Mousse");
-		BlocksFinal bf7 = new BlocksFinalInteger(1);
-		BlocksFinal bf8 = new BlocksFinalInteger(2);
-		BlocksFinal bf9 = new BlocksFinalInteger(3);
-		BlocksFinal bf10 = new BlocksFinalDouble(4.1);
-		BlocksFinalList bf11 = new BlocksFinalList(Boolean.TRUE);
-		bf11.add(true);
-		bf11.add(false);
-		bf1.move(getWidth() / 2, 50);
-		bf2.move(getWidth() / 2, 70);
-		bf3.move(getWidth() / 2, 90);
-		bf4.move(getWidth() / 2, 110);
-		bf5.move(getWidth() / 2, 130);
-		bf6.move(getWidth() / 2, 150);
-		bf7.move(getWidth() / 2, 170);
-		bf8.move(getWidth() / 2, 190);
-		bf9.move(getWidth() / 2, 210);
-		bf10.move(getWidth() / 2, 230);
-		bf11.move(getWidth() / 2, 250);
-		addBlock(bf1);
-		addBlock(bf2);
-		addBlock(bf3);
-		addBlock(bf4);
-		addBlock(bf5);
-		addBlock(bf6);
-		addBlock(bf7);
-		addBlock(bf8);
-		addBlock(bf9);
-		addBlock(bf10);
-		addBlock(bf11);
-		bi3.setEnd(true);
-		be1.setNext(bi1);
-		bi1.setChildren(bi11);
-		bi1.setNext(bi2);
-		bi2.setNext(bi3);
-	}
-
 	@Override
 	public void paintComponents(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
@@ -252,7 +186,14 @@ public class MainGUI extends JFrame implements MouseListener, MouseMotionListene
 			} else if ("ABOUT_ABOUT".equalsIgnoreCase(cmd)) {
 				project.getGUIManager().showAboutGUI();
 			} else if ("RIGHTCLICK_DELETE".equalsIgnoreCase(cmd)) {
-
+				if (blockHover == null) {
+					return;
+				}
+				int n = JOptionPane.showConfirmDialog(null, "Are you sure to delete all these blocks ?", "Warning",
+						JOptionPane.WARNING_MESSAGE, JOptionPane.YES_NO_OPTION);
+				if (n == JOptionPane.YES_OPTION) {
+					project.getBlocksManager().removeBlocks(blockHover);
+				}
 			} else if ("RIGHTCLICK_ABOUT".equalsIgnoreCase(cmd)) {
 
 			}
@@ -327,7 +268,7 @@ public class MainGUI extends JFrame implements MouseListener, MouseMotionListene
 		IBlocks block = null;
 		int minWidth = 0;
 		int minHeight = 0;
-		for (IBlocks b : blocks) {
+		for (IBlocks b : project.getBlocksManager().getBlocks()) {
 			InternalGUIFrame igf = b.getInternalGUIFrame();
 			if (x >= igf.getX() && x <= igf.getX() + igf.getWidth() && y >= igf.getY()
 					&& y <= igf.getY() + igf.getHeight()) {
@@ -360,16 +301,6 @@ public class MainGUI extends JFrame implements MouseListener, MouseMotionListene
 	@Override
 	public void mouseExited(MouseEvent e) {
 		// Nothing to do here
-	}
-
-	public void addBlock(IBlocks block) {
-		blocks.add(block);
-		getContentPane().add(block.getInternalGUIFrame());
-	}
-
-	public void remove(IBlocks block) {
-		blocks.remove(block);
-		remove(block.getInternalGUIFrame());
 	}
 
 	// RIGHT CLICK MENU

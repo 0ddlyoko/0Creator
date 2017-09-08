@@ -3,6 +3,7 @@ package me.oddlyoko.zeroCreator;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import me.oddlyoko.zeroCreator.blocks.BlocksManager;
 import me.oddlyoko.zeroCreator.gui.GUIManager;
 
 public class Project {
@@ -11,6 +12,7 @@ public class Project {
 	 */
 	private GUIManager guiManager = new GUIManager(this);
 	private PluginInformation pluginInformation = new PluginInformation(null, null, null);
+	private BlocksManager blocksManager = new BlocksManager(this);
 
 	public Project() {
 		guiManager.init();
@@ -30,6 +32,7 @@ public class Project {
 						+ pluginInformation.getPluginName() + " (v" + pluginInformation.getPluginVersion() + ")");
 			}
 		});
+		blocksManager.init();
 	}
 
 	public void askPluginInformation() {
@@ -50,6 +53,10 @@ public class Project {
 
 	public PluginInformation getPluginInformation() {
 		return pluginInformation;
+	}
+
+	public BlocksManager getBlocksManager() {
+		return blocksManager;
 	}
 
 	public void close() {
