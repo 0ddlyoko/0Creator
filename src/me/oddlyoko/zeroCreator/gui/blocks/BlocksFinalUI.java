@@ -4,8 +4,9 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.GeneralPath;
 
-import me.oddlyoko.zeroCreator.blocks.BlocksFinal;
 import me.oddlyoko.zeroCreator.blocks.IBlocks;
+import me.oddlyoko.zeroCreator.blocks.finalblocks.BlocksFinal;
+import me.oddlyoko.zeroCreator.composant.IComposant;
 import me.oddlyoko.zeroCreator.gui.InternalGUIFrame;
 
 public class BlocksFinalUI extends InternalGUIFrame {
@@ -63,12 +64,16 @@ public class BlocksFinalUI extends InternalGUIFrame {
 
 	@Override
 	public void draw(Graphics2D g2d) {
-
+		for (IComposant comp : block.getComposantList())
+			if (comp != null)
+				comp.draw(g2d);
 	}
 
 	@Override
 	public int getTotalWidth() {
-		return MINWIDTH;
+		int width = sizeround + 5 + getBlock().getComposantList()[0].getWidth() + 5;
+		// return Math.max(MINWIDTH, width);
+		return width;
 	}
 
 	@Override

@@ -1,20 +1,25 @@
 package me.oddlyoko.zeroCreator;
 
-import javax.swing.JOptionPane;
-
-import me.oddlyoko.zeroCreator.gui.GUIManager;
-
 public class ZeroCreator {
-
-	public ZeroCreator() {
-		GUIManager.showMainGUI();
-		JOptionPane.showMessageDialog(null, "Salut !");
-		// GUIPopUpResult dialog = new GUIPopUpResult();
-		// dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		// dialog.setVisible(true);
-	}
+	private static Project project = null;
 
 	public static void main(String[] args) {
-		new ZeroCreator();
+		createNewProject();
+	}
+
+	public static void createNewProject() {
+		setProject(new Project());
+	}
+
+	public static void setProject(Project project) {
+		if (ZeroCreator.project != null)
+			ZeroCreator.project.close();
+		ZeroCreator.project = project;
+		ZeroCreator.project.getGUIManager().showBlocksGUI();
+		ZeroCreator.project.getGUIManager().showMainGUI();
+	}
+
+	public static Project getProject() {
+		return project;
 	}
 }

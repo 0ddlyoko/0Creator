@@ -8,21 +8,22 @@ import me.oddlyoko.zeroCreator.composant.IComposant;
 import me.oddlyoko.zeroCreator.gui.InternalGUIFrame;
 import me.oddlyoko.zeroCreator.gui.blocks.BlocksEventUI;
 
-public class BlocksEvents implements IBlocksNext {
+public class BlocksEvents extends Block implements IBlocksNext {
+	private final String NAME = "Events";
 	private InternalGUIFrame internalGUIFrame;
 	private IComposant[] composants = new IComposant[1];
 
 	private IBlocksPrevious next = null;
 
 	public BlocksEvents(String title) {
+		this(title, 20, 20);
+	}
+
+	public BlocksEvents(String title, int x, int y) {
 		ComposantBasicText cbt = new ComposantBasicText(title);
 		cbt.setX(10);
 		cbt.setY(2);
 		composants[0] = cbt;
-		internalGUIFrame = new BlocksEventUI(this);
-	}
-
-	public BlocksEvents(int x, int y) {
 		internalGUIFrame = new BlocksEventUI(this, x, y);
 	}
 
@@ -35,16 +36,32 @@ public class BlocksEvents implements IBlocksNext {
 	public void move(int x, int y) {
 		getInternalGUIFrame().setLocation(x, y);
 		if (next != null) {
-			next.move(getInternalGUIFrame().getX(),
+			next.getBlock().move(getInternalGUIFrame().getX(),
 					getInternalGUIFrame().getY() + getInternalGUIFrame().getTotalHeight());
 		}
 	}
 
 	@Override
-	public List<IBlocks> getBlocks() {
-		List<IBlocks> list = new ArrayList<>();
+	public List<ICustomBlocks> getBlocks() {
+		List<ICustomBlocks> list = new ArrayList<>();
 		list.add(next);
 		return list;
+	}
+
+	@Override
+	public void removeBlock(IBlocks b) {
+		if (next != null && next.getBlock().equals(b)) {
+			next.setPrevious(null);
+			setNext(null);
+		}
+	}
+
+	@Override
+	public void delete() {
+		if (next != null) {
+			next.setPrevious(null);
+			setNext(null);
+		}
 	}
 
 	@Override
@@ -54,7 +71,7 @@ public class BlocksEvents implements IBlocksNext {
 		else if (next instanceof BlocksInstruction) {
 			this.next = next;
 			next.setPrevious(this);
-			next.move(getInternalGUIFrame().getX(),
+			next.getBlock().move(getInternalGUIFrame().getX(),
 					getInternalGUIFrame().getY() + getInternalGUIFrame().getTotalHeight());
 		}
 	}
@@ -67,5 +84,27 @@ public class BlocksEvents implements IBlocksNext {
 	@Override
 	public IComposant[] getComposantList() {
 		return composants;
+	}
+
+	@Override
+	public IBlocks getBlock() {
+		return this;
+	}
+
+	@Override
+	public String getName() {
+		return NAME;
+	}
+
+	@Override
+	public IBlocks clone1() {
+		BlocksEvents b = new BlocksEvents("");
+		b.setNext(next);
+		ComposantBasicText thisCbt = (ComposantBasicText) composants[0];
+		ComposantBasicText cbt = new ComposantBasicText(thisCbt.getText());
+		cbt.setX(thisCbt.getX());
+		cbt.setY(thisCbt.getY());
+		b.composants[0] = cbt;
+		return b;
 	}
 }

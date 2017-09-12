@@ -7,18 +7,17 @@ import me.oddlyoko.zeroCreator.composant.IComposant;
 import me.oddlyoko.zeroCreator.gui.InternalGUIFrame;
 import me.oddlyoko.zeroCreator.gui.blocks.BlocksInstructionUI;
 
-public class BlocksInstruction implements IBlocksNext, IBlocksPrevious {
-	private String name;
+public class BlocksInstruction extends Block implements IBlocksNext, IBlocksPrevious {
+	private final String NAME = "Instruction";
 	private InternalGUIFrame internalGUIFrame;
 	private boolean end = false;
 	private IComposant[] composants = new IComposant[0];
 
-	private IBlocks children = null;
+	private IBlocksPrevious children = null;
 	private IBlocksPrevious next = null;
 	private IBlocksNext previous = null;
 
-	public BlocksInstruction(String name) {
-		this.name = name;
+	public BlocksInstruction() {
 		internalGUIFrame = new BlocksInstructionUI(this);
 	}
 
@@ -26,16 +25,16 @@ public class BlocksInstruction implements IBlocksNext, IBlocksPrevious {
 		internalGUIFrame = new BlocksInstructionUI(this, x, y);
 	}
 
-	public IBlocks getChildren() {
+	public IBlocksPrevious getChildren() {
 		return children;
 	}
 
-	public void setChildren(IBlocks children) {
+	public void setChildren(IBlocksPrevious children) {
 		if (children == null)
 			this.children = null;
 		else if (children instanceof BlocksInstruction) {
 			this.children = children;
-			children.move(getInternalGUIFrame().getX() + 40, getInternalGUIFrame().getY() + 25);
+			children.getBlock().move(getInternalGUIFrame().getX() + 40, getInternalGUIFrame().getY() + 25);
 		}
 	}
 
@@ -48,21 +47,51 @@ public class BlocksInstruction implements IBlocksNext, IBlocksPrevious {
 	public void move(int x, int y) {
 		getInternalGUIFrame().setLocation(x, y);
 		if (children != null)
-			children.move(getInternalGUIFrame().getX() + 40, getInternalGUIFrame().getY() + 25);
+			children.getBlock().move(getInternalGUIFrame().getX() + 40, getInternalGUIFrame().getY() + 25);
 		if (!end && next != null) {
-			next.move(getInternalGUIFrame().getX(),
+			next.getBlock().move(getInternalGUIFrame().getX(),
 					getInternalGUIFrame().getY() + getInternalGUIFrame().getTotalHeight());
 		}
 	}
 
 	@Override
-	public List<IBlocks> getBlocks() {
-		List<IBlocks> list = new ArrayList<>();
+	public List<ICustomBlocks> getBlocks() {
+		List<ICustomBlocks> list = new ArrayList<>();
 		list.add(children);
 		if (!end) {
 			list.add(next);
 		}
 		return list;
+	}
+
+	@Override
+	public void removeBlock(IBlocks b) {
+		if (children != null && children.getBlock().equals(b)) {
+			children.setPrevious(null);
+			setChildren(null);
+		} else if (next != null && next.getBlock().equals(b)) {
+			next.setPrevious(null);
+			setNext(null);
+		} else if (previous != null && previous.getBlock().equals(b)) {
+			previous.setNext(null);
+			setPrevious(null);
+		}
+	}
+
+	@Override
+	public void delete() {
+		if (children != null) {
+			children.setPrevious(null);
+			setChildren(null);
+		}
+		if (next != null) {
+			next.setPrevious(null);
+			setNext(null);
+		}
+		if (previous != null) {
+			previous.setNext(null);
+			setPrevious(null);
+		}
 	}
 
 	@Override
@@ -78,7 +107,7 @@ public class BlocksInstruction implements IBlocksNext, IBlocksPrevious {
 			else if (next instanceof BlocksInstruction) {
 				this.next = next;
 				next.setPrevious(this);
-				next.move(getInternalGUIFrame().getX(),
+				next.getBlock().move(getInternalGUIFrame().getX(),
 						getInternalGUIFrame().getY() + getInternalGUIFrame().getTotalHeight());
 			}
 		}
@@ -105,5 +134,25 @@ public class BlocksInstruction implements IBlocksNext, IBlocksPrevious {
 	@Override
 	public IComposant[] getComposantList() {
 		return composants;
+	}
+
+	@Override
+	public IBlocks getBlock() {
+		return this;
+	}
+
+	@Override
+	public String getName() {
+		return NAME;
+	}
+
+	@Override
+	public IBlocks clone1() {
+		BlocksInstruction b = new BlocksInstruction();
+		b.setChildren(children);
+		b.setEnd(end);
+		b.setNext(next);
+		b.setPrevious(previous);
+		return b;
 	}
 }
