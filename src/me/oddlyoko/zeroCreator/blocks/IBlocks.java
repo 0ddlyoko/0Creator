@@ -26,6 +26,8 @@ public interface IBlocks {
 
 	public void delete();
 
+	public IBlocks clone1();
+
 	public default void resize(int width, int height) {
 		getInternalGUIFrame().setSize(width, height);
 	}

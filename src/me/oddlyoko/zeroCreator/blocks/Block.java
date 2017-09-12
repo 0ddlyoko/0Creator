@@ -28,7 +28,7 @@ public abstract class Block implements IBlocks {
 	}
 
 	public void onPress() {
-
+		// NOTHING TO DO HERE
 	}
 
 	public void setHover(boolean is, int x, int y) {

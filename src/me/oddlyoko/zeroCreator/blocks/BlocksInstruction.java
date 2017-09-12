@@ -145,4 +145,14 @@ public class BlocksInstruction extends Block implements IBlocksNext, IBlocksPrev
 	public String getName() {
 		return NAME;
 	}
+
+	@Override
+	public IBlocks clone1() {
+		BlocksInstruction b = new BlocksInstruction();
+		b.setChildren(children);
+		b.setEnd(end);
+		b.setNext(next);
+		b.setPrevious(previous);
+		return b;
+	}
 }

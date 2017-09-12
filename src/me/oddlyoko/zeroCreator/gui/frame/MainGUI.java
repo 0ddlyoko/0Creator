@@ -1,7 +1,5 @@
 package me.oddlyoko.zeroCreator.gui.frame;
 
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -15,8 +13,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
 
 import me.oddlyoko.zeroCreator.Project;
@@ -29,6 +25,7 @@ import me.oddlyoko.zeroCreator.gui.InternalGUIFrame;
 public class MainGUI extends JFrame implements MouseListener, MouseMotionListener, ActionListener {
 	private static final long serialVersionUID = 1L;
 	private Project project = null;
+	private boolean end = false;
 
 	private Block blockHover = null;
 	private Block blockPressed = null;
@@ -59,18 +56,6 @@ public class MainGUI extends JFrame implements MouseListener, MouseMotionListene
 	}
 
 	private void initialize() {
-		// Set Default Theme
-		try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (ClassNotFoundException ex) {
-			ex.printStackTrace();
-		} catch (InstantiationException ex) {
-			ex.printStackTrace();
-		} catch (IllegalAccessException ex) {
-			ex.printStackTrace();
-		} catch (UnsupportedLookAndFeelException ex) {
-			ex.printStackTrace();
-		}
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(1000, 700);
 		setLocationRelativeTo(null);
@@ -140,24 +125,26 @@ public class MainGUI extends JFrame implements MouseListener, MouseMotionListene
 		contentPane.addMouseListener(this);
 		contentPane.addMouseMotionListener(this);
 
+		add(project.getGUIManager().getBlocksGUI().getPanelBlocks());
+
 		// ---------- REPAINT ----------
 
 		new Thread(new Runnable() {
 
 			@Override
 			public void run() {
-				while (true) {
+				while (!end) {
 					repaint();
 				}
 			}
 		}).start();
 	}
 
-	@Override
-	public void paintComponents(Graphics g) {
-		Graphics2D g2d = (Graphics2D) g;
-		g2d.drawRoundRect(getX(), getY(), getWidth(), getHeight(), 5, 5);
-	}
+	/*
+	 * @Override public void paintComponents(Graphics g) { Graphics2D g2d =
+	 * (Graphics2D) g; // TODO: Ne sert a rien ? g2d.drawRoundRect(getX(),
+	 * getY(), getWidth(), getHeight(), 5, 5); }
+	 */
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -189,8 +176,8 @@ public class MainGUI extends JFrame implements MouseListener, MouseMotionListene
 				if (blockHover == null) {
 					return;
 				}
-				int n = JOptionPane.showConfirmDialog(null, "Are you sure to delete all these blocks ?", "Warning",
-						JOptionPane.WARNING_MESSAGE, JOptionPane.YES_NO_OPTION);
+				int n = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete all these blocks ?",
+						"Warning", JOptionPane.WARNING_MESSAGE, JOptionPane.YES_NO_OPTION);
 				if (n == JOptionPane.YES_OPTION) {
 					project.getBlocksManager().removeBlocks(blockHover);
 				}
@@ -204,6 +191,9 @@ public class MainGUI extends JFrame implements MouseListener, MouseMotionListene
 	public void mouseDragged(MouseEvent e) { // TODO REWRITE THIS IN ANOTHER
 												// CLASS
 		if (blockHover != null) {
+			if (e.getX() >= 0 && e.getX() <= project.getGUIManager().getBlocksGUI().getPanelBlocks().getWidth()
+					&& e.getY() >= 0 && e.getY() <= project.getGUIManager().getBlocksGUI().getPanelBlocks().getHeight())
+				return;
 			if (blockHover instanceof IBlocksPrevious) {
 				IBlocksPrevious ibp = (IBlocksPrevious) blockHover;
 				if (ibp.getPrevious() != null)
@@ -220,6 +210,9 @@ public class MainGUI extends JFrame implements MouseListener, MouseMotionListene
 			blockHover.setHover(false, 0, 0);
 			blockHover = null;
 		}
+		if (e.getX() >= 0 && e.getX() <= project.getGUIManager().getBlocksGUI().getPanelBlocks().getWidth()
+				&& e.getY() >= 0 && e.getY() <= project.getGUIManager().getBlocksGUI().getPanelBlocks().getHeight())
+			return;
 		IBlocks b = getBlockAt(e.getX(), e.getY());
 		if (b != null && b instanceof Block) {
 			blockHover = (Block) b;
@@ -235,6 +228,9 @@ public class MainGUI extends JFrame implements MouseListener, MouseMotionListene
 			blockClicked.setClick(false, 0, 0);
 			blockClicked = null;
 		}
+		if (e.getX() >= 0 && e.getX() <= project.getGUIManager().getBlocksGUI().getPanelBlocks().getWidth()
+				&& e.getY() >= 0 && e.getY() <= project.getGUIManager().getBlocksGUI().getPanelBlocks().getHeight())
+			return;
 		IBlocks b = getBlockAt(e.getX(), e.getY());
 		if (b != null && b instanceof Block) {
 			blockClicked = (Block) b;
@@ -251,6 +247,10 @@ public class MainGUI extends JFrame implements MouseListener, MouseMotionListene
 			blockPressed.setPress(false, 0, 0);
 			blockPressed = null;
 		}
+		if (e.getX() >= 0 && e.getX() <= project.getGUIManager().getBlocksGUI().getPanelBlocks().getWidth()
+				&& e.getY() >= 0 && e.getY() <= project.getGUIManager().getBlocksGUI().getPanelBlocks().getHeight())
+			return;
+		project.getGUIManager().getBlocksGUI().getPanelBlocks().setSeparator(null);
 		IBlocks b = getBlockAt(e.getX(), e.getY());
 		if (b != null && b instanceof Block) {
 			blockPressed = (Block) b;
@@ -349,5 +349,9 @@ public class MainGUI extends JFrame implements MouseListener, MouseMotionListene
 		}
 
 		popupMenu.show(e.getComponent(), e.getX(), e.getY());
+	}
+
+	public void stop() {
+		end = true;
 	}
 }

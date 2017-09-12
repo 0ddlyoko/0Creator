@@ -1,25 +1,42 @@
 package me.oddlyoko.zeroCreator.gui;
 
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
 import me.oddlyoko.zeroCreator.Project;
 import me.oddlyoko.zeroCreator.gui.frame.AboutGUI;
 import me.oddlyoko.zeroCreator.gui.frame.InformationGUI;
 import me.oddlyoko.zeroCreator.gui.frame.MainGUI;
-import me.oddlyoko.zeroCreator.gui.popup.GUIPopUpResult;
+import me.oddlyoko.zeroCreator.gui.frame.blocks.BlocksGUI;
 
 public class GUIManager {
 	private Project project = null;
 	private MainGUI mainGUI = null;
 	private InformationGUI informationGUI = null;
 	private AboutGUI aboutGUI = null;
+	private BlocksGUI blocksGUI = null;
 
 	public GUIManager(Project project) {
 		this.project = project;
 	}
 
 	public void init() {
+		// Set Default Theme
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (ClassNotFoundException ex) {
+			ex.printStackTrace();
+		} catch (InstantiationException ex) {
+			ex.printStackTrace();
+		} catch (IllegalAccessException ex) {
+			ex.printStackTrace();
+		} catch (UnsupportedLookAndFeelException ex) {
+			ex.printStackTrace();
+		}
+		blocksGUI = new BlocksGUI(project);
 		mainGUI = new MainGUI(project);
-		informationGUI = new InformationGUI(project);
 		aboutGUI = new AboutGUI(project);
+		informationGUI = new InformationGUI(project);
 	}
 
 	public MainGUI getMainGUI() {
@@ -46,14 +63,19 @@ public class GUIManager {
 		aboutGUI.setVisible(true);
 	}
 
-	public Object askPopUp(GUIPopUpResult popup) {
-		// TODO END HERE
-		return null;
+	public BlocksGUI getBlocksGUI() {
+		return blocksGUI;
+	}
+
+	public void showBlocksGUI() {
+		blocksGUI.setVisible(true);
 	}
 
 	public void close() {
+		mainGUI.stop();
 		mainGUI.dispose();
 		informationGUI.dispose();
 		aboutGUI.dispose();
+		blocksGUI.dispose();
 	}
 }

@@ -95,4 +95,16 @@ public class BlocksEvents extends Block implements IBlocksNext {
 	public String getName() {
 		return NAME;
 	}
+
+	@Override
+	public IBlocks clone1() {
+		BlocksEvents b = new BlocksEvents("");
+		b.setNext(next);
+		ComposantBasicText thisCbt = (ComposantBasicText) composants[0];
+		ComposantBasicText cbt = new ComposantBasicText(thisCbt.getText());
+		cbt.setX(thisCbt.getX());
+		cbt.setY(thisCbt.getY());
+		b.composants[0] = cbt;
+		return b;
+	}
 }
