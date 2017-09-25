@@ -12,6 +12,9 @@ public abstract class Block implements IBlocks {
 	private boolean press = false;
 	private int xPress = 0;
 	private int yPress = 0;
+	private boolean rightClick = false;
+	private int xRightClick = 0;
+	private int yRightClick = 0;
 
 	@Override
 	public void onHover() {
@@ -27,6 +30,15 @@ public abstract class Block implements IBlocks {
 				c.onClick();
 	}
 
+	@Override
+	public void onRightClick() {
+		for (IComposant c : getComposantList()) {
+			if (c != null && c.isInside(xRightClick, yRightClick))
+				c.onRightClick();
+		}
+	}
+
+	@Override
 	public void onPress() {
 		// NOTHING TO DO HERE
 	}
@@ -47,6 +59,12 @@ public abstract class Block implements IBlocks {
 		press = is;
 		xPress = x;
 		yPress = y;
+	}
+
+	public void setRightClick(boolean is, int x, int y) {
+		rightClick = is;
+		xRightClick = x;
+		yRightClick = y;
 	}
 
 	public boolean isHover() {
@@ -83,5 +101,17 @@ public abstract class Block implements IBlocks {
 
 	public int getYPressed() {
 		return yPress;
+	}
+
+	public boolean isRightClicked() {
+		return rightClick;
+	}
+
+	public int getXRightClicked() {
+		return xRightClick;
+	}
+
+	public int getYRightClicked() {
+		return yRightClick;
 	}
 }

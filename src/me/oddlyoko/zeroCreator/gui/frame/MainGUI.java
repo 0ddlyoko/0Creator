@@ -30,6 +30,7 @@ public class MainGUI extends JFrame implements MouseListener, MouseMotionListene
 	private Block blockHover = null;
 	private Block blockPressed = null;
 	private Block blockClicked = null;
+	private Block blockRightClicked = null;
 
 	// MENU
 	private JMenuBar menuBar;
@@ -247,6 +248,10 @@ public class MainGUI extends JFrame implements MouseListener, MouseMotionListene
 			blockPressed.setPress(false, 0, 0);
 			blockPressed = null;
 		}
+		if (blockRightClicked != null) {
+			blockRightClicked.setPress(false, 0, 0);
+			blockRightClicked = null;
+		}
 		if (e.getX() >= 0 && e.getX() <= project.getGUIManager().getBlocksGUI().getPanelBlocks().getWidth()
 				&& e.getY() >= 0 && e.getY() <= project.getGUIManager().getBlocksGUI().getPanelBlocks().getHeight())
 			return;
@@ -260,6 +265,14 @@ public class MainGUI extends JFrame implements MouseListener, MouseMotionListene
 			System.out.println("Pressed: " + blockPressed);
 		}
 		if (e.isPopupTrigger()) {
+			if (b != null && b instanceof Block) {
+				// TODO CHANGE IT ???? I DON'T KNOW
+				blockRightClicked = (Block) b;
+				blockRightClicked.setRightClick(true, e.getX() - b.getInternalGUIFrame().getX(),
+						e.getY() - b.getInternalGUIFrame().getY());
+				blockRightClicked.onRightClick();
+				System.out.println("Right Clicked: " + blockRightClicked);
+			}
 			showMenu(e, blockHover);
 		}
 	}
@@ -289,6 +302,15 @@ public class MainGUI extends JFrame implements MouseListener, MouseMotionListene
 			blockPressed = null;
 		}
 		if (e.isPopupTrigger()) {
+			IBlocks b = getBlockAt(e.getX(), e.getY());
+			if (b != null && b instanceof Block) {
+				// TODO CHANGE IT ???? I DON'T KNOW
+				blockRightClicked = (Block) b;
+				blockRightClicked.setRightClick(true, e.getX() - b.getInternalGUIFrame().getX(),
+						e.getY() - b.getInternalGUIFrame().getY());
+				blockRightClicked.onRightClick();
+				System.out.println("Right Clicked: " + blockRightClicked);
+			}
 			showMenu(e, blockHover);
 		}
 	}
@@ -315,6 +337,7 @@ public class MainGUI extends JFrame implements MouseListener, MouseMotionListene
 	private JMenuItem mntmAbout;
 
 	private void showMenu(MouseEvent e, Block b) {
+		System.out.println("SHOWMENU !");
 		System.out.println(b);
 
 		popupMenu = new JPopupMenu();

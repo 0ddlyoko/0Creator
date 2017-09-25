@@ -6,9 +6,9 @@ import javax.swing.JOptionPane;
 
 import me.oddlyoko.zeroCreator.Project;
 import me.oddlyoko.zeroCreator.blocks.finalblocks.BlocksFinal;
+import me.oddlyoko.zeroCreator.blocks.finalblocks.BlocksFinalBoolean;
 import me.oddlyoko.zeroCreator.blocks.finalblocks.BlocksFinalDouble;
 import me.oddlyoko.zeroCreator.blocks.finalblocks.BlocksFinalInteger;
-import me.oddlyoko.zeroCreator.blocks.finalblocks.BlocksFinalList;
 import me.oddlyoko.zeroCreator.blocks.finalblocks.BlocksFinalString;
 
 public class BlocksManager {
@@ -46,9 +46,7 @@ public class BlocksManager {
 		BlocksFinal bf8 = new BlocksFinalInteger(2);
 		BlocksFinal bf9 = new BlocksFinalInteger(3);
 		BlocksFinal bf10 = new BlocksFinalDouble(4.1);
-		BlocksFinalList bf11 = new BlocksFinalList(Boolean.TRUE);
-		bf11.add(true);
-		bf11.add(false);
+		BlocksFinal bf11 = new BlocksFinalBoolean(true);
 		bf1.move(project.getGUIManager().getMainGUI().getWidth() / 2, 50);
 		bf2.move(project.getGUIManager().getMainGUI().getWidth() / 2, 70);
 		bf3.move(project.getGUIManager().getMainGUI().getWidth() / 2, 90);

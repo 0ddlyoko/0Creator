@@ -96,6 +96,12 @@ public abstract class ComposantEditable implements IComposant {
 	}
 
 	@Override
+	public void onRightClick() {
+		System.out.println("RightClicked EditableText: ");
+
+	}
+
+	@Override
 	public void onHover() {
 		// System.out.println("Hover EditableText: " + txt);
 	}

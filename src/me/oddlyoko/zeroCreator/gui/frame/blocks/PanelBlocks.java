@@ -75,6 +75,8 @@ public class PanelBlocks extends JPanel implements MouseListener, MouseMotionLis
 		int x = e.getX();
 		int y = e.getY();
 		IBlocks b = getBlockAt(x, y);
+		if (b == null)
+			return;
 		IBlocks b2 = b.clone1();
 		b2.move(project.getGUIManager().getMainGUI().getWidth() / 2,
 				project.getGUIManager().getMainGUI().getHeight() / 2);

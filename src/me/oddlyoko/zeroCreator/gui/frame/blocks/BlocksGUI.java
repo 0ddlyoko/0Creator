@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 
 import me.oddlyoko.zeroCreator.Project;
 import me.oddlyoko.zeroCreator.blocks.BlocksInstruction;
+import me.oddlyoko.zeroCreator.blocks.finalblocks.BlocksFinalBoolean;
 import me.oddlyoko.zeroCreator.blocks.finalblocks.BlocksFinalDouble;
 import me.oddlyoko.zeroCreator.blocks.finalblocks.BlocksFinalInteger;
 import me.oddlyoko.zeroCreator.blocks.finalblocks.BlocksFinalList;
@@ -60,9 +61,12 @@ public class BlocksGUI extends JDialog implements ActionListener {
 		finalBlocks.addBlock(new BlocksFinalString("0ddlyoko"));
 		finalBlocks.addBlock(new BlocksFinalInteger(1));
 		finalBlocks.addBlock(new BlocksFinalDouble(1.0));
-		BlocksFinalList bfList = new BlocksFinalList(true);
-		bfList.add(true);
-		bfList.add(false);
+		finalBlocks.addBlock(new BlocksFinalBoolean(true));
+		BlocksFinalList bfList = new BlocksFinalList("Element 1");
+		bfList.add("Element 1");
+		bfList.add("Element 2");
+		bfList.add("Element 3");
+		bfList.add("Element 4");
 		finalBlocks.addBlock(bfList);
 		addSeparator(finalBlocks);
 	}

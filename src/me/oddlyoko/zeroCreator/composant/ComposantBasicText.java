@@ -82,6 +82,11 @@ public class ComposantBasicText implements IComposant {
 	}
 
 	@Override
+	public void onRightClick() {
+		// System.out.println("RightClicked BasicText: " + txt);
+	}
+
+	@Override
 	public void onHover() {
 		// System.out.println("Hover BasicText: " + txt);
 	}
