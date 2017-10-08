@@ -19,7 +19,6 @@ import me.oddlyoko.zeroCreator.Project;
 import me.oddlyoko.zeroCreator.ZeroCreator;
 import me.oddlyoko.zeroCreator.blocks.Block;
 import me.oddlyoko.zeroCreator.blocks.IBlocks;
-import me.oddlyoko.zeroCreator.blocks.IBlocksPrevious;
 import me.oddlyoko.zeroCreator.gui.InternalGUIFrame;
 
 public class MainGUI extends JFrame implements MouseListener, MouseMotionListener, ActionListener {
@@ -189,18 +188,13 @@ public class MainGUI extends JFrame implements MouseListener, MouseMotionListene
 	}
 
 	@Override
-	public void mouseDragged(MouseEvent e) { // TODO REWRITE THIS IN ANOTHER
-												// CLASS
+	public void mouseDragged(MouseEvent e) { // TODO REWRITE THIS
 		if (blockHover != null) {
 			if (e.getX() >= 0 && e.getX() <= project.getGUIManager().getBlocksGUI().getPanelBlocks().getWidth()
 					&& e.getY() >= 0 && e.getY() <= project.getGUIManager().getBlocksGUI().getPanelBlocks().getHeight())
 				return;
-			if (blockHover instanceof IBlocksPrevious) {
-				IBlocksPrevious ibp = (IBlocksPrevious) blockHover;
-				if (ibp.getPrevious() != null)
-					ibp.getPrevious().setNext(null);
-				ibp.setPrevious(null);
-			}
+			if (blockHover.getParent() != null)
+				blockHover.getParent().removeBlock(blockHover);
 			blockHover.move(e.getX(), e.getY());
 		}
 	}

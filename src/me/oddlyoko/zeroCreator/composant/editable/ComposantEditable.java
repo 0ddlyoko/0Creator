@@ -6,9 +6,9 @@ import java.awt.Graphics2D;
 
 import javax.swing.JOptionPane;
 
-import me.oddlyoko.zeroCreator.composant.IComposant;
+import me.oddlyoko.zeroCreator.composant.Composant;
 
-public abstract class ComposantEditable implements IComposant {
+public abstract class ComposantEditable extends Composant {
 	private int x = 0;
 	private int y = 0;
 	private int width = 0;

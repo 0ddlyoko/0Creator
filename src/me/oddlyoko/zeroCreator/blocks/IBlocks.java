@@ -8,9 +8,12 @@ import me.oddlyoko.zeroCreator.gui.InternalGUIFrame;
 public interface IBlocks {
 	
 	public InternalGUIFrame getInternalGUIFrame();
-	public List<ICustomBlocks> getBlocks();
+	public List<IBlocks> getBlocks();
 	public void removeBlock(IBlocks b);
+	public IBlocks getParent();
+	public void setParent(IBlocks b);
 	public void move(int x, int y);
+	public void updateAll();
 	public IComposant[] getComposantList();
 	public void onHover();
 	public void onClick();
@@ -19,6 +22,7 @@ public interface IBlocks {
 	public String getName();
 	public void delete();
 	public IBlocks clone1();
+	public String toCode();
 	
 	public default void resize(int width, int height) {
 		getInternalGUIFrame().setSize(width, height);

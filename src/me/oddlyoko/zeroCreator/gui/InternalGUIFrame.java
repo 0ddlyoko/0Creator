@@ -9,7 +9,7 @@ import java.awt.geom.GeneralPath;
 import javax.swing.JPanel;
 
 import me.oddlyoko.zeroCreator.blocks.Block;
-import me.oddlyoko.zeroCreator.blocks.ICustomBlocks;
+import me.oddlyoko.zeroCreator.blocks.IBlocks;
 import me.oddlyoko.zeroCreator.gui.blocks.IBlocksUI;
 
 public abstract class InternalGUIFrame extends JPanel implements IBlocksUI {
@@ -47,10 +47,9 @@ public abstract class InternalGUIFrame extends JPanel implements IBlocksUI {
 		}
 		g2d.draw(path);
 		draw(g2d);
-		for (ICustomBlocks b : getBlock().getBlocks()) {
+		for (IBlocks b : getBlock().getBlocks()) {
 			if (b != null) {
-				b.getBlock().getInternalGUIFrame().repaint();
-				// add(b.getInternalGUIFrame());
+				b.getInternalGUIFrame().repaint();
 			}
 		}
 		if (getBlock() instanceof Block) {

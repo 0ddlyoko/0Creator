@@ -2,21 +2,32 @@ package me.oddlyoko.zeroCreator.blocks.finalblocks;
 
 import java.util.List;
 
+import me.oddlyoko.zeroCreator.Project;
 import me.oddlyoko.zeroCreator.blocks.IBlocks;
 import me.oddlyoko.zeroCreator.composant.editable.ComposantEditableList;
 
-public class BlocksFinalList extends BlocksFinal {
+public class BlocksFinalList extends BlocksFinal<List<Object>> {
 	private final String NAME = "Final List";
 
-	public BlocksFinalList(Object defvalue) {
-		this(defvalue, 13, 2);
+	public BlocksFinalList(Project project, Object defvalue) {
+		this(project, defvalue, 13, 2);
 	}
 
-	public BlocksFinalList(Object defvalue, int x, int y) {
-		super(defvalue, x, y);
+	public BlocksFinalList(Project project, Object defvalue, Object[] listvalue) {
+		this(project, defvalue, listvalue, 13, 2);
+	}
+
+	public BlocksFinalList(Project project, Object defvalue, int x, int y) {
+		this(project, defvalue, new Object[] { defvalue }, x, y);
+	}
+
+	public BlocksFinalList(Project project, Object defvalue, Object[] listvalue, int x, int y) {
+		super(project, defvalue, x, y);
 		ComposantEditableList cet = new ComposantEditableList(defvalue);
 		cet.setX(13);
 		cet.setY(2);
+		for (Object obj : listvalue)
+			cet.addItem(obj);
 		setComposant(cet);
 	}
 
@@ -28,10 +39,6 @@ public class BlocksFinalList extends BlocksFinal {
 		((ComposantEditableList) getComposant(0)).removeItem(obj);
 	}
 
-	public List<Object> getItems() {
-		return ((ComposantEditableList) getComposant(0)).getItems();
-	}
-
 	@Override
 	public String getName() {
 		return NAME;
@@ -39,15 +46,18 @@ public class BlocksFinalList extends BlocksFinal {
 
 	@Override
 	public IBlocks clone1() {
-		ComposantEditableList thisCel = (ComposantEditableList) getComposant(0);
-		ComposantEditableList cel = new ComposantEditableList(thisCel.getObject());
-		cel.setX(thisCel.getX());
-		cel.setY(thisCel.getY());
-		BlocksFinalList bfl = new BlocksFinalList(thisCel.getObject());
-		bfl.setComposant(cel);
-		for (Object obj : thisCel.getItems())
-			bfl.add(obj);
-
-		return bfl;
+		/*
+		 * ComposantEditableList thisCel = (ComposantEditableList)
+		 * getComposant(0); ComposantEditableList cel = new
+		 * ComposantEditableList(thisCel.getObject()); cel.setX(thisCel.getX());
+		 * cel.setY(thisCel.getY()); if (thisCel.isLock()) cel.lock(); else
+		 * cel.unlock(); BlocksFinalList bfl = new BlocksFinalList(getProject(),
+		 * cel.getObject()); bfl.setComposant(cel); for (Object obj :
+		 * thisCel.getItems()) bfl.add(obj);
+		 * 
+		 * return bfl;
+		 */
+		return new BlocksFinalList(getProject(), ((ComposantEditableList) getComposant(0)).getObject(),
+				((ComposantEditableList) getComposant(0)).getItems().toArray());
 	}
 }

@@ -17,9 +17,11 @@ public class ZeroCreator {
 		ZeroCreator.project = project;
 		ZeroCreator.project.getGUIManager().showBlocksGUI();
 		ZeroCreator.project.getGUIManager().showMainGUI();
+		ZeroCreator.project.getBlocksManager().addAll();
+		ZeroCreator.project.getBlocksManager().updateAll();
 	}
 
-	public static Project getProject() {
+	public Project getProject() {
 		return project;
 	}
 }

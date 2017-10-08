@@ -1,13 +1,15 @@
 package me.oddlyoko.zeroCreator.composant;
 
+import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 
-public class ComposantBasicText implements IComposant {
+public class ComposantBasicText extends Composant {
 	private int x = 0;
 	private int y = 0;
 	private int width = 0;
 	private int height = 0;
+	private Color font = Color.BLACK;
 	private FontMetrics fm = null;
 	private String oldTxt = "";
 	private String txt = "";
@@ -50,7 +52,10 @@ public class ComposantBasicText implements IComposant {
 			width = fm.stringWidth(txt);
 			height = fm.getHeight();
 		}
+		Color oldC = g2d.getColor();
+		g2d.setColor(font);
 		g2d.drawString(txt, x, y + getHeight());
+		g2d.setColor(oldC);
 	}
 
 	@Override
@@ -69,6 +74,14 @@ public class ComposantBasicText implements IComposant {
 
 	public String getText() {
 		return txt;
+	}
+
+	public void setFont(Color font) {
+		this.font = font;
+	}
+
+	public Color getFont() {
+		return font;
 	}
 
 	@Override

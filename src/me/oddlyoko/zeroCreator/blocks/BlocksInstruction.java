@@ -3,12 +3,16 @@ package me.oddlyoko.zeroCreator.blocks;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.oddlyoko.zeroCreator.blocks.conditionblocks.BlocksIfElse;
+import me.oddlyoko.zeroCreator.blocks.customBlocks.IBlocksNext;
+import me.oddlyoko.zeroCreator.blocks.customBlocks.IBlocksPrevious;
+import me.oddlyoko.zeroCreator.blocks.customBlocks.ICustomBlocks;
 import me.oddlyoko.zeroCreator.composant.IComposant;
 import me.oddlyoko.zeroCreator.gui.InternalGUIFrame;
-import me.oddlyoko.zeroCreator.gui.blocks.BlocksInstructionUI;
+import me.oddlyoko.zeroCreator.gui.blocks.BlocksIfElseUI;
 
 public class BlocksInstruction extends Block implements IBlocksNext, IBlocksPrevious {
-	private final String NAME = "Instruction";
+	private final String NAME = "IfElse";
 	private InternalGUIFrame internalGUIFrame;
 	private boolean end = false;
 	private IComposant[] composants = new IComposant[0];
@@ -17,12 +21,12 @@ public class BlocksInstruction extends Block implements IBlocksNext, IBlocksPrev
 	private IBlocksPrevious next = null;
 	private IBlocksNext previous = null;
 
-	public BlocksInstruction() {
-		internalGUIFrame = new BlocksInstructionUI(this);
+	public BlocksIfElse() {
+		internalGUIFrame = new BlocksIfElseUI(this);
 	}
 
-	public BlocksInstruction(int x, int y) {
-		internalGUIFrame = new BlocksInstructionUI(this, x, y);
+	public BlocksIfElse(int x, int y) {
+		internalGUIFrame = new BlocksIfElseUI(this, x, y);
 	}
 
 	public IBlocksPrevious getChildren() {
@@ -32,7 +36,7 @@ public class BlocksInstruction extends Block implements IBlocksNext, IBlocksPrev
 	public void setChildren(IBlocksPrevious children) {
 		if (children == null)
 			this.children = null;
-		else if (children instanceof BlocksInstruction) {
+		else {
 			this.children = children;
 			children.getBlock().move(getInternalGUIFrame().getX() + 40, getInternalGUIFrame().getY() + 25);
 		}
@@ -104,7 +108,7 @@ public class BlocksInstruction extends Block implements IBlocksNext, IBlocksPrev
 		if (!end) {
 			if (next == null)
 				this.next = null;
-			else if (next instanceof BlocksInstruction) {
+			else if (next instanceof BlocksIfElse) {
 				this.next = next;
 				next.setPrevious(this);
 				next.getBlock().move(getInternalGUIFrame().getX(),
@@ -148,7 +152,7 @@ public class BlocksInstruction extends Block implements IBlocksNext, IBlocksPrev
 
 	@Override
 	public IBlocks clone1() {
-		BlocksInstruction b = new BlocksInstruction();
+		BlocksIfElse b = new BlocksIfElse();
 		b.setChildren(children);
 		b.setEnd(end);
 		b.setNext(next);

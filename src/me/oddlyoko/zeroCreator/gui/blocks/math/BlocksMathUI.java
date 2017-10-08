@@ -1,32 +1,32 @@
-package me.oddlyoko.zeroCreator.gui.blocks;
+package me.oddlyoko.zeroCreator.gui.blocks.math;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.GeneralPath;
 
 import me.oddlyoko.zeroCreator.blocks.IBlocks;
-import me.oddlyoko.zeroCreator.blocks.finalblocks.BlocksFinal;
+import me.oddlyoko.zeroCreator.blocks.mathblocks.BlocksMath;
 import me.oddlyoko.zeroCreator.composant.IComposant;
 import me.oddlyoko.zeroCreator.gui.InternalGUIFrame;
 
-public class BlocksFinalUI extends InternalGUIFrame {
+public class BlocksMathUI extends InternalGUIFrame {
 	private static final long serialVersionUID = 1L;
 	private static final int MINWIDTH = 40;
 	private static final int MINHEIGHT = 25;
 	private int sizeround = 5;
 	private int heightIndicator = 7;
 	private int widthIndicator = 10;
-	private BlocksFinal<?> block;
+	private BlocksMath block;
 
-	public BlocksFinalUI(BlocksFinal<?> block) {
+	public BlocksMathUI(BlocksMath block) {
 		this(block, 0, 0);
 	}
 
-	public BlocksFinalUI(BlocksFinal<?> block, int x, int y) {
+	public BlocksMathUI(BlocksMath block, int x, int y) {
 		this(block, x, y, MINWIDTH, MINHEIGHT);
 	}
 
-	public BlocksFinalUI(BlocksFinal<?> block, int x, int y, int width, int height) {
+	public BlocksMathUI(BlocksMath block, int x, int y, int width, int height) {
 		super(x, y, width, height);
 		this.block = block;
 	}
@@ -71,7 +71,7 @@ public class BlocksFinalUI extends InternalGUIFrame {
 
 	@Override
 	public int getTotalWidth() {
-		int width = sizeround + 5 + getBlock().getComposantList()[0].getWidth() + 5;
+		int width = sizeround + 5 + getBlock().getComposantList()[0].getWidth() + getBlock().getComposantList()[1].getWidth() + 5;
 		// return Math.max(MINWIDTH, width);
 		return width;
 	}

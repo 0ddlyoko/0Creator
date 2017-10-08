@@ -2,18 +2,20 @@ package me.oddlyoko.zeroCreator.blocks.finalblocks;
 
 import java.util.List;
 
+import me.oddlyoko.zeroCreator.Project;
 import me.oddlyoko.zeroCreator.blocks.IBlocks;
+import me.oddlyoko.zeroCreator.composant.editable.ComposantEditable;
 import me.oddlyoko.zeroCreator.composant.editable.ComposantEditableList;
 
-public class BlocksFinalBoolean extends BlocksFinal {
+public class BlocksFinalBoolean extends BlocksFinal<Boolean> {
 	private final String NAME = "Final List";
 
-	public BlocksFinalBoolean(Boolean defvalue) {
-		this(defvalue, 13, 2);
+	public BlocksFinalBoolean(Project project, Boolean defvalue) {
+		this(project, defvalue, 13, 2);
 	}
 
-	public BlocksFinalBoolean(Boolean defvalue, int x, int y) {
-		super(defvalue, x, y);
+	public BlocksFinalBoolean(Project project, Boolean defvalue, int x, int y) {
+		super(project, defvalue, x, y);
 		ComposantEditableList cet = new ComposantEditableList(defvalue);
 		cet.setX(13);
 		cet.setY(2);
@@ -34,16 +36,18 @@ public class BlocksFinalBoolean extends BlocksFinal {
 
 	@Override
 	public IBlocks clone1() {
-		ComposantEditableList thisCel = (ComposantEditableList) getComposant(0);
-		BlocksFinalBoolean bfb = new BlocksFinalBoolean(
-				(thisCel.getObject() instanceof Boolean) ? (Boolean) thisCel.getObject() : false);
-		ComposantEditableList cel = new ComposantEditableList(thisCel.getObject());
-		cel.setX(thisCel.getX());
-		cel.setY(thisCel.getY());
-		cel.addItem(true);
-		cel.addItem(false);
-		bfb.setComposant(cel);
-
-		return bfb;
+		/*
+		 * ComposantEditableList thisCel = (ComposantEditableList)
+		 * getComposant(0); ComposantEditableList cel = new
+		 * ComposantEditableList(thisCel.getObject()); cel.setX(thisCel.getX());
+		 * cel.setY(thisCel.getY()); cel.addItem(true); cel.addItem(false); if
+		 * (thisCel.isLock()) cel.lock(); else cel.unlock(); BlocksFinalBoolean
+		 * bfb = new BlocksFinalBoolean(getProject(), (cel.getObject()
+		 * instanceof Boolean) ? (Boolean) cel.getObject() : false);
+		 * bfb.setComposant(cel);
+		 * 
+		 * return bfb;
+		 */
+		return new BlocksFinalBoolean(getProject(), ((Boolean) ((ComposantEditable) getComposant(0)).getObject()));
 	}
 }

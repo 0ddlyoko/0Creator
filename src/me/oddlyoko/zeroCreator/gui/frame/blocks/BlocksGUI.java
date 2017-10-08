@@ -13,7 +13,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import me.oddlyoko.zeroCreator.Project;
-import me.oddlyoko.zeroCreator.blocks.BlocksInstruction;
+import me.oddlyoko.zeroCreator.blocks.conditionblocks.BlocksIfElse;
 import me.oddlyoko.zeroCreator.blocks.finalblocks.BlocksFinalBoolean;
 import me.oddlyoko.zeroCreator.blocks.finalblocks.BlocksFinalDouble;
 import me.oddlyoko.zeroCreator.blocks.finalblocks.BlocksFinalInteger;
@@ -55,14 +55,14 @@ public class BlocksGUI extends JDialog implements ActionListener {
 
 	public void init() {
 		Separators conditional = new Separators("Conditional");
-		conditional.addBlock(new BlocksInstruction());
+		conditional.addBlock(new BlocksIfElse(project));
 		addSeparator(conditional);
 		Separators finalBlocks = new Separators("Final");
-		finalBlocks.addBlock(new BlocksFinalString("0ddlyoko"));
-		finalBlocks.addBlock(new BlocksFinalInteger(1));
-		finalBlocks.addBlock(new BlocksFinalDouble(1.0));
-		finalBlocks.addBlock(new BlocksFinalBoolean(true));
-		BlocksFinalList bfList = new BlocksFinalList("Element 1");
+		finalBlocks.addBlock(new BlocksFinalString(project, "0ddlyoko"));
+		finalBlocks.addBlock(new BlocksFinalInteger(project, 1));
+		finalBlocks.addBlock(new BlocksFinalDouble(project, 1.0));
+		finalBlocks.addBlock(new BlocksFinalBoolean(project, true));
+		BlocksFinalList bfList = new BlocksFinalList(project, "Element 1");
 		bfList.add("Element 1");
 		bfList.add("Element 2");
 		bfList.add("Element 3");

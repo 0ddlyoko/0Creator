@@ -46,9 +46,14 @@ public class ComposantEditableList extends ComposantEditable {
 	}
 
 	@Override
+	public boolean isEditable() {
+		return lock;
+	}
+
+	@Override
 	public void onClick() {
 		Object result = JOptionPane.showInputDialog(null, "Please Choose new value: ", "", JOptionPane.QUESTION_MESSAGE,
-				null, items.toArray(), items.get(0));
+				null, items.toArray(), items.size() == 0 ? "" : items.get(0));
 		if (result != null)
 			setObject(result);
 	}

@@ -15,6 +15,7 @@ public abstract class Block implements IBlocks {
 	private boolean rightClick = false;
 	private int xRightClick = 0;
 	private int yRightClick = 0;
+	private IBlocks parent = null;
 
 	@Override
 	public void onHover() {
@@ -113,5 +114,13 @@ public abstract class Block implements IBlocks {
 
 	public int getYRightClicked() {
 		return yRightClick;
+	}
+
+	public IBlocks getParent() {
+		return parent;
+	}
+
+	public void setParent(IBlocks b) {
+		this.parent = b;
 	}
 }
