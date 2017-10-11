@@ -18,7 +18,7 @@ public class BlocksMath extends BlockResultType<Integer> {
 	private BlocksMathEnum bme;
 	private Project project;
 	private InternalGUIFrame internalGUIFrame;
-	private ArrayList<BlocksFinal<Integer>> nbs;
+	private BlocksFinal<?>[] nbs;
 	private IComposant[] composants = new IComposant[2];
 
 	public BlocksMath(Project project, BlocksMathEnum bme) {
@@ -28,16 +28,17 @@ public class BlocksMath extends BlockResultType<Integer> {
 	public BlocksMath(Project project, BlocksMathEnum bme, int x, int y) {
 		this.project = project;
 		this.bme = bme;
-		nbs = new ArrayList<>();
+		nbs = new BlocksFinal<?>[bme.getVars().length];
 		ComposantBasicText cbt = new ComposantBasicText("Math: ");
 		cbt.setX(13);
 		cbt.setY(2);
 		composants[0] = cbt;
-		ComposantEditableList cel = new ComposantEditableList(BlocksMathEnum.MAX.name);
+		ComposantEditableList cel = new ComposantEditableList(bme.name);
 		for (BlocksMathEnum bmes : BlocksMathEnum.values())
 			cel.addItem(bmes.getName());
 		cel.setComposantEvent(() -> {
 			this.bme = BlocksMathEnum.getValueOf((String) cel.getObject());
+			project.getBlocksManager().updateAll();
 		});
 		cel.lock();
 		cel.setX(45);
@@ -51,12 +52,12 @@ public class BlocksMath extends BlockResultType<Integer> {
 		return composants[i];
 	}
 
-	public BlocksFinal<Integer> getNb(int nb) {
-		return nbs.get(nb);
+	public BlocksFinal<?> getNb(int nb) {
+		return nbs[nb];
 	}
 
-	public void setNb(int nb, BlocksFinal<Integer> value) {
-		nbs.set(nb, value);
+	public void setNb(int nb, BlocksFinal<?> value) {
+		nbs[nb] = value;
 		project.getBlocksManager().updateAll();
 	}
 
@@ -76,7 +77,7 @@ public class BlocksMath extends BlockResultType<Integer> {
 	@Override
 	public List<IBlocks> getBlocks() {
 		List<IBlocks> list = new ArrayList<>();
-		for (BlocksFinal<Integer> irt : nbs)
+		for (BlocksFinal<?> irt : nbs)
 			list.add(irt);
 		return list;
 	}
@@ -85,33 +86,40 @@ public class BlocksMath extends BlockResultType<Integer> {
 	public void removeBlock(IBlocks b) {
 		if (b == null)
 			return;
-		if (b instanceof BlocksFinal) {
-			BlocksFinal<?> irt = (BlocksFinal<?>) b;
-			irt.setParent(null);
-			nbs.remove(b);
+		if (b instanceof BlockResultType<?>) {
+			b.setParent(null);
+			for (int i = 0; i < bme.getVars().length; i++)
+				if (nbs[i] == b)
+					nbs[i] = null;
 		}
 		project.getBlocksManager().updateAll();
 	}
 
 	@Override
 	public void delete() {
-		for (BlocksFinal<Integer> irt : nbs) {
+		for (BlocksFinal<?> irt : nbs) {
 			if (irt == null)
 				continue;
 			irt.setParent(null);
-			nbs.remove(irt);
+			removeBlock(irt);
 		}
 		project.getBlocksManager().updateAll();
 	}
 
 	@Override
 	public String toCode() {
-		StringBuilder result = new StringBuilder("Math.").append(BlocksMathEnum.getValueOf(bme.getCmd()));
-		if (bme.getNb() != 0) {
-			result.append("(").append(nbs.get(0).toCode());
-			for (int i = 1; i < bme.getNb(); i++)
-				result.append(", ").append(nbs.get(1).toCode());
+		StringBuilder result = new StringBuilder();
+		if (bme.isMathClass())
+			result.append("Math.").append(bme.getCmd());
+		result.append("(");
+		if (bme.getVars().length >= 1) {
+			result.append((nbs[0] == null) ? "null" : nbs[0].toCode());
+			for (int i = 1; i < bme.getVars().length; i++) {
+				result.append((bme.isMathClass()) ? bme.getCmd() : ", ");
+				result.append((nbs[i] == null) ? "null" : nbs[i].toCode());
+			}
 		}
+		result.append(");");
 		return result.toString();
 	}
 
@@ -125,7 +133,16 @@ public class BlocksMath extends BlockResultType<Integer> {
 
 	@Override
 	public void updateAll() {
-
+		if (bme.getVars().length < nbs.length)
+			for (int i = bme.getVars().length; i < nbs.length; i++)
+				removeBlock(nbs[i]);
+		if (bme.getVars().length != nbs.length) {
+			BlocksFinal<?>[] bf = new BlocksFinal<?>[bme.getVars().length];
+			for (int i = 0; i < bf.length; i++)
+				nbs[i] = bf[i];
+			nbs = bf;
+			project.getBlocksManager().updateAll();
+		}
 	}
 
 	@Override
@@ -148,17 +165,26 @@ public class BlocksMath extends BlockResultType<Integer> {
 	}
 
 	public enum BlocksMathEnum {
-		MAX("Max", "Max", 2),
-		MIN("Min", "Min", 2);
+		MAX("Max", "max", false, Integer.class, Integer.class), // MAX
+		MIN("Min", "min", false, Integer.class, Integer.class), // MIN
+		PLUS("+", "+", true, Integer.class, Integer.class), // '+'
+		MINUS("-", "-", true, Integer.class, Integer.class), // '-'
+		TIMES("*", "*", true, Integer.class, Integer.class), // '*'
+		DIVIDED("/", "/", true, Integer.class, Integer.class), // '*'
+		MODULO("%", "%", true, Integer.class, Integer.class); // '/'
 
-		private String name;
-		private String cmd;
-		private int nb;
+		private String name = null;
+		private String cmd = null;
+		private boolean mathClass = true;
+		private Class<?>[] vars = null;
 
-		private BlocksMathEnum(String name, String cmd, int nb) {
+		private BlocksMathEnum(String name, String cmd, boolean mathClass, Class<?>... vars) {
 			this.name = name;
 			this.cmd = cmd;
-			this.nb = nb;
+			this.mathClass = mathClass;
+			if (vars == null)
+				vars = new Class<?>[0];
+			this.vars = vars;
 		}
 
 		public String getName() {
@@ -169,8 +195,12 @@ public class BlocksMath extends BlockResultType<Integer> {
 			return cmd;
 		}
 
-		public int getNb() {
-			return nb;
+		public boolean isMathClass() {
+			return mathClass;
+		}
+
+		public Class<?>[] getVars() {
+			return vars;
 		}
 
 		public static BlocksMathEnum getValueOf(String name) {

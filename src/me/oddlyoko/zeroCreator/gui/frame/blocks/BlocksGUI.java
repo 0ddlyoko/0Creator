@@ -62,11 +62,8 @@ public class BlocksGUI extends JDialog implements ActionListener {
 		finalBlocks.addBlock(new BlocksFinalInteger(project, 1));
 		finalBlocks.addBlock(new BlocksFinalDouble(project, 1.0));
 		finalBlocks.addBlock(new BlocksFinalBoolean(project, true));
-		BlocksFinalList bfList = new BlocksFinalList(project, "Element 1");
-		bfList.add("Element 1");
-		bfList.add("Element 2");
-		bfList.add("Element 3");
-		bfList.add("Element 4");
+		BlocksFinalList bfList = new BlocksFinalList(project, "Element 1",
+				new String[] { "Element 1", "Element 2", "Element 3", "Element 4" });
 		finalBlocks.addBlock(bfList);
 		addSeparator(finalBlocks);
 	}
