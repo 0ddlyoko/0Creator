@@ -4,17 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.oddlyoko.zeroCreator.Project;
-import me.oddlyoko.zeroCreator.blocks.customBlocks.BlocksChildren;
+import me.oddlyoko.zeroCreator.blocks.customBlocks.IBlocksChildren;
 import me.oddlyoko.zeroCreator.composant.ComposantBasicText;
 import me.oddlyoko.zeroCreator.composant.IComposant;
 import me.oddlyoko.zeroCreator.gui.InternalGUIFrame;
 import me.oddlyoko.zeroCreator.gui.blocks.BlocksEventUI;
 
-public class BlocksEvents extends BlocksChildren {
+public class BlocksEvents extends Block implements IBlocksChildren {
 	private final String NAME = "Events";
 	private Project project;
 	private InternalGUIFrame internalGUIFrame;
 	private IComposant[] composants = new IComposant[1];
+	private IBlocks children;
 
 	public BlocksEvents(Project project, String title) {
 		this(project, title, 20, 20);
@@ -58,6 +59,8 @@ public class BlocksEvents extends BlocksChildren {
 
 	@Override
 	public void removeBlock(IBlocks b) {
+		if (b == null)
+			return;
 		if (getChildren() != null && getChildren().equals(b)) {
 			getChildren().setParent(null);
 			setChildren(null);
@@ -67,20 +70,22 @@ public class BlocksEvents extends BlocksChildren {
 
 	@Override
 	public void delete() {
-		if (getChildren() != null) {
-			getChildren().setParent(null);
-			setChildren(null);
-		}
+		removeBlock(getChildren());
 		project.getBlocksManager().updateAll();
 	}
 
 	@Override
+	public IBlocks getChildren() {
+		return children;
+	}
+
+	@Override
 	public void setChildren(IBlocks b) {
-		super.setChildren(b);
-		if (b != null) {
+		if (this.children != null)
+			this.children.setParent(null);
+		this.children = b;
+		if (b != null)
 			b.setParent(this);
-			b.move(getInternalGUIFrame().getX(), getInternalGUIFrame().getY() + getInternalGUIFrame().getTotalHeight());
-		}
 		project.getBlocksManager().updateAll();
 	}
 

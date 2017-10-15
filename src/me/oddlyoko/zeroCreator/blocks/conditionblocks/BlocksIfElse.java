@@ -4,8 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.oddlyoko.zeroCreator.Project;
+import me.oddlyoko.zeroCreator.blocks.Block;
 import me.oddlyoko.zeroCreator.blocks.IBlocks;
-import me.oddlyoko.zeroCreator.blocks.customBlocks.BlocksChildren;
+import me.oddlyoko.zeroCreator.blocks.customBlocks.IBlocksChildren;
 import me.oddlyoko.zeroCreator.composant.ComposantBasicText;
 import me.oddlyoko.zeroCreator.composant.ComposantButton;
 import me.oddlyoko.zeroCreator.composant.ComposantButton.ComposantButtonClicked;
@@ -14,12 +15,13 @@ import me.oddlyoko.zeroCreator.composant.IComposant;
 import me.oddlyoko.zeroCreator.gui.InternalGUIFrame;
 import me.oddlyoko.zeroCreator.gui.blocks.BlocksIfElseUI;
 
-public class BlocksIfElse extends BlocksChildren {
+public class BlocksIfElse extends Block implements IBlocksChildren {
 	private final String NAME = "IfElse";
 	private Project project;
 	private InternalGUIFrame internalGUIFrame;
 	private boolean hasElse = false;
 	private IComposant[] composants = new IComposant[3];
+	private IBlocks children;
 
 	private IBlocks ifChildren = null;
 	private IBlocks elseChildren = null;
@@ -82,6 +84,21 @@ public class BlocksIfElse extends BlocksChildren {
 	}
 
 	@Override
+	public IBlocks getChildren() {
+		return children;
+	}
+
+	@Override
+	public void setChildren(IBlocks b) {
+		if (this.children != null)
+			this.children.setParent(null);
+		this.children = b;
+		if (b != null)
+			b.setParent(this);
+		project.getBlocksManager().updateAll();
+	}
+
+	@Override
 	public InternalGUIFrame getInternalGUIFrame() {
 		return internalGUIFrame;
 	}
@@ -127,6 +144,8 @@ public class BlocksIfElse extends BlocksChildren {
 
 	@Override
 	public void removeBlock(IBlocks b) {
+		if (b == null)
+			return;
 		if (ifChildren != null && ifChildren.equals(b)) {
 			ifChildren.setParent(null);
 			setIfChildren(null);
@@ -136,41 +155,18 @@ public class BlocksIfElse extends BlocksChildren {
 		} else if (getChildren() != null && getChildren().equals(b)) {
 			getChildren().setParent(null);
 			setChildren(null);
-		} else if (getParent() != null && getParent().equals(b)) {
-			((BlocksChildren) getParent()).setChildren(null);
-			setParent(null);
-		}
+		} else if (getParent() != null)
+			getParent().removeBlock(this);
 		project.getBlocksManager().updateAll();
 	}
 
 	@Override
 	public void delete() {
-		if (ifChildren != null) {
-			ifChildren.setParent(null);
-			setIfChildren(null);
-		}
-		if (elseChildren != null) {
-			elseChildren.setParent(null);
-			setElseChildren(null);
-		}
-		if (getChildren() != null) {
-			getChildren().setParent(null);
-			setChildren(null);
-		}
-		if (getParent() != null) {
-			((BlocksChildren) getParent()).setChildren(null);
-			setParent(null);
-		}
-		project.getBlocksManager().updateAll();
-	}
-
-	@Override
-	public void setChildren(IBlocks b) {
-		super.setChildren(b);
-		if (b != null) {
-			b.setParent(this);
-			b.move(getInternalGUIFrame().getX(), getInternalGUIFrame().getY() + getInternalGUIFrame().getTotalHeight());
-		}
+		removeBlock(ifChildren);
+		removeBlock(elseChildren);
+		removeBlock(getChildren());
+		if (getParent() != null)
+			getParent().removeBlock(this);
 		project.getBlocksManager().updateAll();
 	}
 
@@ -195,16 +191,6 @@ public class BlocksIfElse extends BlocksChildren {
 
 	@Override
 	public IBlocks clone1() {
-		/*
-		 * BlocksIfElse b = new BlocksIfElse(project);
-		 * 
-		 * ComposantButton cb1 = (ComposantButton) composants[1];
-		 * ComposantButton cb2 = (ComposantButton) b.composants[1];
-		 * cb2.setActive(cb1.isActive());
-		 * 
-		 * 
-		 * return b;
-		 */
 		return new BlocksIfElse(project);
 	}
 

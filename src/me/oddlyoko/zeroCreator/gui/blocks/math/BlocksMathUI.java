@@ -8,14 +8,12 @@ import me.oddlyoko.zeroCreator.blocks.IBlocks;
 import me.oddlyoko.zeroCreator.blocks.mathblocks.BlocksMath;
 import me.oddlyoko.zeroCreator.composant.IComposant;
 import me.oddlyoko.zeroCreator.gui.InternalGUIFrame;
+import me.oddlyoko.zeroCreator.util.gui.BlocksUI;
 
 public class BlocksMathUI extends InternalGUIFrame {
 	private static final long serialVersionUID = 1L;
 	private static final int MINWIDTH = 40;
-	private static final int MINHEIGHT = 25;
-	private int sizeround = 5;
-	private int heightIndicator = 7;
-	private int widthIndicator = 10;
+	private static final int MINHEIGHT = 30;
 	private BlocksMath block;
 
 	public BlocksMathUI(BlocksMath block) {
@@ -38,28 +36,23 @@ public class BlocksMathUI extends InternalGUIFrame {
 
 	@Override
 	public GeneralPath getPath() {
-		GeneralPath path = new GeneralPath();
-		int width = getTotalWidth();
-		int height = getTotalHeight();
-
-		path.moveTo(widthIndicator + sizeround, 0);
-		path.lineTo(width - sizeround, 0);
-		path.curveTo(width, 0, width, 0, width, sizeround);
-		path.lineTo(width, height - sizeround);
-		path.curveTo(width, height, width, height, width - sizeround, height);
-		path.lineTo(widthIndicator + sizeround, height);
-		path.curveTo(widthIndicator, height, widthIndicator, height, widthIndicator, height - sizeround);
-		path.lineTo(widthIndicator, 2.5 * heightIndicator);
-		makeLeftIndicator(path, widthIndicator, (int) (2.5 * heightIndicator));
-		path.lineTo(widthIndicator, sizeround);
-		path.curveTo(widthIndicator, 0, widthIndicator, 0, widthIndicator + sizeround, 0);
+		BlocksMath bm = (BlocksMath) getBlock();
+		GeneralPath path = BlocksUI.addGeneralPathFinalBlocks(new GeneralPath(), getTotalWidth(), getTotalHeight());
+		int x = BlocksUI.SIZEROUND + 5 + getBlock().getComposantList()[0].getWidth()
+				+ getBlock().getComposantList()[1].getWidth() + 16;
+		for (int i = 0; i < bm.getBlocks().size(); i++) {
+			if (bm.getBlocks().get(i) != null) {
+				BlocksUI.addGeneralPathFinalBlocks(path, x, 2,
+						bm.getBlocks().get(i).getInternalGUIFrame().getTotalWidth(),
+						bm.getBlocks().get(i).getInternalGUIFrame().getTotalHeight());
+				x += bm.getBlocks().get(i).getInternalGUIFrame().getTotalWidth() + 5;
+			} else {
+				BlocksUI.addGeneralPathFinalBlocks(path, x, 2, BlocksUI.SIZEROUND + 10, MINHEIGHT);
+				x += BlocksUI.SIZEROUND + 10 + 5;
+			}
+		}
 		path.closePath();
 		return path;
-	}
-
-	private void makeLeftIndicator(GeneralPath path, int currX, int currY) {
-		path.curveTo(currX - (widthIndicator * 1.5), currY + (heightIndicator * 2), currX - (widthIndicator * 1.5),
-				currY - (heightIndicator * 3), currX, currY - heightIndicator);
 	}
 
 	@Override
@@ -71,14 +64,23 @@ public class BlocksMathUI extends InternalGUIFrame {
 
 	@Override
 	public int getTotalWidth() {
-		int width = sizeround + 5 + getBlock().getComposantList()[0].getWidth() + getBlock().getComposantList()[1].getWidth() + 5;
+		BlocksMath bm = (BlocksMath) getBlock();
+		int width = BlocksUI.SIZEROUND + 5 + getBlock().getComposantList()[0].getWidth()
+				+ getBlock().getComposantList()[1].getWidth() + 10;
+		for (IBlocks b : bm.getBlocks())
+			width += ((b == null) ? BlocksUI.SIZEROUND + 10 : b.getInternalGUIFrame().getWidth()) + 5;
 		// return Math.max(MINWIDTH, width);
 		return width;
 	}
 
 	@Override
 	public int getTotalHeight() {
-		return MINHEIGHT;
+		BlocksMath bm = (BlocksMath) getBlock();
+		int height = MINHEIGHT;
+		for (IBlocks b : bm.getBlocks())
+			if (b != null && b.getInternalGUIFrame().getHeight() + 5 > height)
+				height = b.getInternalGUIFrame().getHeight() + 5;
+		return height;
 	}
 
 	@Override

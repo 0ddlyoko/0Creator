@@ -8,25 +8,23 @@ import me.oddlyoko.zeroCreator.blocks.IBlocks;
 import me.oddlyoko.zeroCreator.blocks.finalblocks.BlocksFinal;
 import me.oddlyoko.zeroCreator.composant.IComposant;
 import me.oddlyoko.zeroCreator.gui.InternalGUIFrame;
+import me.oddlyoko.zeroCreator.util.gui.BlocksUI;
 
 public class BlocksFinalUI extends InternalGUIFrame {
 	private static final long serialVersionUID = 1L;
 	private static final int MINWIDTH = 40;
 	private static final int MINHEIGHT = 25;
-	private int sizeround = 5;
-	private int heightIndicator = 7;
-	private int widthIndicator = 10;
-	private BlocksFinal<?> block;
+	private BlocksFinal block;
 
-	public BlocksFinalUI(BlocksFinal<?> block) {
+	public BlocksFinalUI(BlocksFinal block) {
 		this(block, 0, 0);
 	}
 
-	public BlocksFinalUI(BlocksFinal<?> block, int x, int y) {
+	public BlocksFinalUI(BlocksFinal block, int x, int y) {
 		this(block, x, y, MINWIDTH, MINHEIGHT);
 	}
 
-	public BlocksFinalUI(BlocksFinal<?> block, int x, int y, int width, int height) {
+	public BlocksFinalUI(BlocksFinal block, int x, int y, int width, int height) {
 		super(x, y, width, height);
 		this.block = block;
 	}
@@ -38,28 +36,9 @@ public class BlocksFinalUI extends InternalGUIFrame {
 
 	@Override
 	public GeneralPath getPath() {
-		GeneralPath path = new GeneralPath();
-		int width = getTotalWidth();
-		int height = getTotalHeight();
-
-		path.moveTo(widthIndicator + sizeround, 0);
-		path.lineTo(width - sizeround, 0);
-		path.curveTo(width, 0, width, 0, width, sizeround);
-		path.lineTo(width, height - sizeround);
-		path.curveTo(width, height, width, height, width - sizeround, height);
-		path.lineTo(widthIndicator + sizeround, height);
-		path.curveTo(widthIndicator, height, widthIndicator, height, widthIndicator, height - sizeround);
-		path.lineTo(widthIndicator, 2.5 * heightIndicator);
-		makeLeftIndicator(path, widthIndicator, (int) (2.5 * heightIndicator));
-		path.lineTo(widthIndicator, sizeround);
-		path.curveTo(widthIndicator, 0, widthIndicator, 0, widthIndicator + sizeround, 0);
+		GeneralPath path = BlocksUI.addGeneralPathFinalBlocks(new GeneralPath(), getTotalWidth(), getTotalHeight());
 		path.closePath();
 		return path;
-	}
-
-	private void makeLeftIndicator(GeneralPath path, int currX, int currY) {
-		path.curveTo(currX - (widthIndicator * 1.5), currY + (heightIndicator * 2), currX - (widthIndicator * 1.5),
-				currY - (heightIndicator * 3), currX, currY - heightIndicator);
 	}
 
 	@Override
@@ -71,7 +50,7 @@ public class BlocksFinalUI extends InternalGUIFrame {
 
 	@Override
 	public int getTotalWidth() {
-		int width = sizeround + 5 + getBlock().getComposantList()[0].getWidth() + 5;
+		int width = BlocksUI.SIZEROUND + 5 + getBlock().getComposantList()[0].getWidth() + 5;
 		// return Math.max(MINWIDTH, width);
 		return width;
 	}

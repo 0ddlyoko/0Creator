@@ -4,16 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.oddlyoko.zeroCreator.Project;
+import me.oddlyoko.zeroCreator.blocks.Block;
 import me.oddlyoko.zeroCreator.blocks.IBlocks;
-import me.oddlyoko.zeroCreator.blocks.customBlocks.BlockResultType;
-import me.oddlyoko.zeroCreator.blocks.customBlocks.BlocksChildren;
+import me.oddlyoko.zeroCreator.blocks.customBlocks.IBlockResultType;
 import me.oddlyoko.zeroCreator.composant.IComposant;
 import me.oddlyoko.zeroCreator.composant.editable.ComposantEditable;
 import me.oddlyoko.zeroCreator.composant.editable.ComposantEditableText;
 import me.oddlyoko.zeroCreator.gui.InternalGUIFrame;
 import me.oddlyoko.zeroCreator.gui.blocks.BlocksFinalUI;
 
-public abstract class BlocksFinal<E> extends BlockResultType<E> {
+public abstract class BlocksFinal extends Block implements IBlockResultType {
 	private Project project;
 	private InternalGUIFrame internalGUIFrame;
 	private IComposant[] composants = new IComposant[1];
@@ -52,18 +52,14 @@ public abstract class BlocksFinal<E> extends BlockResultType<E> {
 
 	@Override
 	public void removeBlock(IBlocks b) {
-		if (getParent() != null && getParent().equals(b)) {
-			((BlocksChildren) getParent()).setChildren(null);
-			setParent(null);
-		}
+		if (b == null)
+			return;
 	}
 
 	@Override
 	public void delete() {
-		if (getParent() != null) {
-			((BlocksChildren) getParent()).setChildren(null);
-			setParent(null);
-		}
+		if (getParent() != null)
+			getParent().removeBlock(this);
 		project.getBlocksManager().updateAll();
 	}
 

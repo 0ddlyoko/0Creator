@@ -2,10 +2,11 @@ package me.oddlyoko.zeroCreator.blocks.finalblocks;
 
 import me.oddlyoko.zeroCreator.Project;
 import me.oddlyoko.zeroCreator.blocks.IBlocks;
+import me.oddlyoko.zeroCreator.blocks.customBlocks.IBlockResultInteger;
 import me.oddlyoko.zeroCreator.composant.editable.ComposantEditable;
 import me.oddlyoko.zeroCreator.composant.editable.ComposantEditableInteger;
 
-public class BlocksFinalInteger extends BlocksFinal<Integer> {
+public class BlocksFinalInteger extends BlocksFinal implements IBlockResultInteger {
 	private final String NAME = "Final Integer";
 
 	public BlocksFinalInteger(Project project, int defvalue) {
@@ -27,16 +28,6 @@ public class BlocksFinalInteger extends BlocksFinal<Integer> {
 
 	@Override
 	public IBlocks clone1() {
-		/*
-		ComposantEditableInteger thisCed = (ComposantEditableInteger) getComposant(0);
-		ComposantEditableInteger ced = new ComposantEditableInteger((Integer) thisCed.getObject());
-		ced.setX(thisCed.getX());
-		ced.setY(thisCed.getY());
-		BlocksFinalInteger bfi = new BlocksFinalInteger(getProject(), 0);
-		bfi.setComposant(ced);
-
-		return bfi;
-		*/
 		return new BlocksFinalInteger(getProject(), ((Integer) ((ComposantEditable) getComposant(0)).getObject()));
 	}
 }

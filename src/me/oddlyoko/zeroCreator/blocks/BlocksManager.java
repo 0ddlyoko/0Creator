@@ -98,6 +98,9 @@ public class BlocksManager {
 		addBlock(bf10);
 		addBlock(bf11);
 		BlocksMath bm = new BlocksMath(project, BlocksMathEnum.MAX);
+		bm.setNb(0, bf7);
+		bm.setNb(1, bf8);
+		bm.setNb(0, bf9);
 		BlocksMath bm2 = new BlocksMath(project, BlocksMathEnum.MIN);
 		addBlock(bm);
 		addBlock(bm2);

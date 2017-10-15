@@ -8,14 +8,12 @@ import me.oddlyoko.zeroCreator.blocks.BlocksEvents;
 import me.oddlyoko.zeroCreator.blocks.IBlocks;
 import me.oddlyoko.zeroCreator.composant.IComposant;
 import me.oddlyoko.zeroCreator.gui.InternalGUIFrame;
+import me.oddlyoko.zeroCreator.util.gui.BlocksUI;
 
 public class BlocksEventUI extends InternalGUIFrame {
 	private static final long serialVersionUID = 1L;
 	private static final int MINWIDTH = 180;
 	private static final int MINHEIGHT = 25;
-	private int sizeround = 5;
-	private int heightIndicator = 10;
-	private int widthIndicator = 7;
 	private BlocksEvents block;
 
 	public BlocksEventUI(BlocksEvents block) {
@@ -42,24 +40,21 @@ public class BlocksEventUI extends InternalGUIFrame {
 		int width = getTotalWidth();
 		int height = getTotalHeight();
 
-		path.moveTo(sizeround, 0);
-		path.lineTo(width - sizeround, 0);
-		path.curveTo(width, 0, width, 0, width, sizeround);
-		path.lineTo(width, height - heightIndicator - sizeround);
-		path.curveTo(width, height - heightIndicator, width, height - heightIndicator, width - sizeround, 25);
-		path.lineTo(25, height - heightIndicator);
-		makeBotIndicator(path, 25, height - heightIndicator);
-		path.lineTo(sizeround, height - heightIndicator);
-		path.curveTo(0, height - heightIndicator, 0, height - heightIndicator, 0, height - heightIndicator - sizeround);
-		path.lineTo(0, 0 + sizeround);
-		path.curveTo(0, 0, 0, 0, 0 + sizeround, 0);
+		path.moveTo(BlocksUI.SIZEROUND, 0);
+		path.lineTo(width - BlocksUI.SIZEROUND, 0);
+		path.curveTo(width, 0, width, 0, width, BlocksUI.SIZEROUND);
+		path.lineTo(width, height - BlocksUI.HEIGHTINDICATOR - BlocksUI.SIZEROUND);
+		path.curveTo(width, height - BlocksUI.HEIGHTINDICATOR, width, height - BlocksUI.HEIGHTINDICATOR,
+				width - BlocksUI.SIZEROUND, 25);
+		path.lineTo(25, height - BlocksUI.HEIGHTINDICATOR);
+		BlocksUI.addBotIndicator(path, 25, height - BlocksUI.HEIGHTINDICATOR, false);
+		path.lineTo(BlocksUI.SIZEROUND, height - BlocksUI.HEIGHTINDICATOR);
+		path.curveTo(0, height - BlocksUI.HEIGHTINDICATOR, 0, height - BlocksUI.HEIGHTINDICATOR, 0,
+				height - BlocksUI.HEIGHTINDICATOR - BlocksUI.SIZEROUND);
+		path.lineTo(0, 0 + BlocksUI.SIZEROUND);
+		path.curveTo(0, 0, 0, 0, 0 + BlocksUI.SIZEROUND, 0);
 		path.closePath();
 		return path;
-	}
-
-	public void makeBotIndicator(GeneralPath path, int currX, int currY) {
-		path.curveTo(currX + (widthIndicator * 2), currY + (heightIndicator * 1.5), currX - (widthIndicator * 3),
-				currY + (heightIndicator * 1.5), currX - widthIndicator, currY);
 	}
 
 	@Override
@@ -76,7 +71,7 @@ public class BlocksEventUI extends InternalGUIFrame {
 
 	@Override
 	public int getTotalHeight() {
-		return MINHEIGHT + heightIndicator;
+		return MINHEIGHT + BlocksUI.HEIGHTINDICATOR;
 	}
 
 	@Override
