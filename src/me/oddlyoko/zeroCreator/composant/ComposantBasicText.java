@@ -70,6 +70,7 @@ public class ComposantBasicText extends Composant {
 
 	public void setText(String txt) {
 		this.txt = txt;
+		event();
 	}
 
 	public String getText() {

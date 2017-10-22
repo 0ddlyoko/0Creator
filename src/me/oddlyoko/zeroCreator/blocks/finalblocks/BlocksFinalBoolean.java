@@ -4,11 +4,10 @@ import java.util.List;
 
 import me.oddlyoko.zeroCreator.Project;
 import me.oddlyoko.zeroCreator.blocks.IBlocks;
-import me.oddlyoko.zeroCreator.blocks.customBlocks.IBlockResultBoolean;
 import me.oddlyoko.zeroCreator.composant.editable.ComposantEditable;
 import me.oddlyoko.zeroCreator.composant.editable.ComposantEditableList;
 
-public class BlocksFinalBoolean extends BlocksFinal implements IBlockResultBoolean {
+public class BlocksFinalBoolean extends BlocksFinal {
 	private final String NAME = "Final List";
 
 	public BlocksFinalBoolean(Project project, Boolean defvalue) {
@@ -38,5 +37,10 @@ public class BlocksFinalBoolean extends BlocksFinal implements IBlockResultBoole
 	@Override
 	public IBlocks clone1() {
 		return new BlocksFinalBoolean(getProject(), ((Boolean) ((ComposantEditable) getComposant(0)).getObject()));
+	}
+
+	@Override
+	public Class<?> getReturnType() {
+		return Boolean.class;
 	}
 }

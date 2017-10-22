@@ -1,11 +1,12 @@
 package me.oddlyoko.zeroCreator.blocks.finalblocks;
 
+import java.util.List;
+
 import me.oddlyoko.zeroCreator.Project;
 import me.oddlyoko.zeroCreator.blocks.IBlocks;
-import me.oddlyoko.zeroCreator.blocks.customBlocks.IBlockResultList;
 import me.oddlyoko.zeroCreator.composant.editable.ComposantEditableList;
 
-public class BlocksFinalList extends BlocksFinal implements IBlockResultList {
+public class BlocksFinalList extends BlocksFinal {
 	private final String NAME = "Final List";
 
 	public BlocksFinalList(Project project, Object defvalue) {
@@ -47,5 +48,10 @@ public class BlocksFinalList extends BlocksFinal implements IBlockResultList {
 	public IBlocks clone1() {
 		return new BlocksFinalList(getProject(), ((ComposantEditableList) getComposant(0)).getObject(),
 				((ComposantEditableList) getComposant(0)).getItems().toArray());
+	}
+
+	@Override
+	public Class<?> getReturnType() {
+		return List.class;
 	}
 }

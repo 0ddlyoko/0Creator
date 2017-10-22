@@ -29,7 +29,6 @@ public abstract class BlocksFinal extends Block implements IBlockResultType {
 		cet.setY(2);
 		setComposant(cet);
 		internalGUIFrame = new BlocksFinalUI(this, x, y);
-		project.getBlocksManager().updateAll();
 	}
 
 	public void setComposant(IComposant comp) {
@@ -60,7 +59,6 @@ public abstract class BlocksFinal extends Block implements IBlockResultType {
 	public void delete() {
 		if (getParent() != null)
 			getParent().removeBlock(this);
-		project.getBlocksManager().updateAll();
 	}
 
 	@Override
@@ -68,7 +66,16 @@ public abstract class BlocksFinal extends Block implements IBlockResultType {
 		if (x == getInternalGUIFrame().getX() && y == getInternalGUIFrame().getY())
 			return;
 		getInternalGUIFrame().setLocation(x, y);
-		project.getBlocksManager().updateAll();
+	}
+
+	@Override
+	public boolean canBlockAt(IBlocks b, int x, int y) {
+		return false;
+	}
+
+	@Override
+	public void setBlockAt(IBlocks b, int x, int y) {
+		return;
 	}
 
 	@Override

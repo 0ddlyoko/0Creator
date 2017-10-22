@@ -75,6 +75,7 @@ public abstract class ComposantEditable extends Composant {
 
 	public void setObject(Object obj) {
 		this.obj = obj;
+		event();
 	}
 
 	public Object getObject() {

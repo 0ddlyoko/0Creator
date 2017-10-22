@@ -14,16 +14,18 @@ import me.oddlyoko.zeroCreator.gui.blocks.IBlocksUI;
 
 public abstract class InternalGUIFrame extends JPanel implements IBlocksUI {
 	private static final long serialVersionUID = 1L;
+	private Location[] locations;
 
-	public InternalGUIFrame() {
-		this(0, 0, 50, 50);
+	public InternalGUIFrame(int nbLocations) {
+		this(nbLocations, 0, 0, 50, 50);
 	}
 
-	public InternalGUIFrame(int x, int y) {
-		this(x, y, 50, 50);
+	public InternalGUIFrame(int nbLocations, int x, int y) {
+		this(nbLocations, x, y, 50, 50);
 	}
 
-	public InternalGUIFrame(int x, int y, int width, int height) {
+	public InternalGUIFrame(int nbLocations, int x, int y, int width, int height) {
+		locations = new Location[nbLocations];
 		setBounds(x, y, width, height);
 		setOpaque(false);
 		setLayout(null);
@@ -69,5 +71,29 @@ public abstract class InternalGUIFrame extends JPanel implements IBlocksUI {
 
 	public boolean isInside(int x, int y) {
 		return x >= getX() && x <= getX() + getWidth() && y >= getY() && y <= getY() + getHeight();
+	}
+
+	public void setLocation(int index, int x, int y) {
+		if (locations.length <= index)
+			return;
+		locations[index] = new Location(x, y);
+	}
+
+	public Location getLocation(int index) {
+		if (locations.length <= index)
+			return null;
+		return locations[index];
+	}
+
+	public Location[] getLocations() {
+		return locations;
+	}
+
+	public void setNbLocations(int nbLocations) {
+		Location[] locTemp = new Location[nbLocations];
+		for (int i = 0; i < locations.length; i++)
+			if (i < nbLocations)
+				locTemp[i] = locations[i];
+		locations = locTemp;
 	}
 }

@@ -3,8 +3,8 @@ package me.oddlyoko.zeroCreator.util.gui;
 import java.awt.geom.GeneralPath;
 
 public class BlocksUI {
-	public static final int SIZEROUND = 5;
-	public static final int HEIGHTINDICATOR = 7;
+	public static final int SIZEROUND = 4;
+	public static final int HEIGHTINDICATOR = 6;
 	public static final int WIDTHINDICATOR = 10;
 
 	public static GeneralPath addGeneralPathFinalBlocks(GeneralPath path, int width, int height) {
@@ -16,7 +16,7 @@ public class BlocksUI {
 		path.moveTo(x + WIDTHINDICATOR + SIZEROUND, y + 0);
 		path.lineTo(x + width - SIZEROUND, y + 0);
 		path.curveTo(x + width, y + 0, x + width, y + 0, x + width, y + SIZEROUND);
-		path.lineTo(x + width, height - SIZEROUND);
+		path.lineTo(x + width, y + height - SIZEROUND);
 		path.curveTo(x + width, y + height, x + width, y + height, x + width - SIZEROUND, y + height);
 		path.lineTo(x + WIDTHINDICATOR + SIZEROUND, y + height);
 		path.curveTo(x + WIDTHINDICATOR, y + height, x + WIDTHINDICATOR, y + height, x + WIDTHINDICATOR,

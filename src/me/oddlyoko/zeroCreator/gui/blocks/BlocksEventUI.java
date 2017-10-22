@@ -25,7 +25,7 @@ public class BlocksEventUI extends InternalGUIFrame {
 	}
 
 	public BlocksEventUI(BlocksEvents block, int x, int y, int width, int height) {
-		super(x, y, width, height);
+		super(0, x, y, width, height);
 		this.block = block;
 	}
 

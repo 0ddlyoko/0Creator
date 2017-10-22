@@ -13,6 +13,8 @@ public interface IBlocks {
 	public IBlocks getParent();
 	public void setParent(IBlocks b);
 	public void move(int x, int y);
+	public boolean canBlockAt(IBlocks b, int x, int y);
+	public void setBlockAt(IBlocks b, int x, int y);
 	public void updateAll();
 	public IComposant[] getComposantList();
 	public void onHover();
@@ -21,6 +23,7 @@ public interface IBlocks {
 	public void onPress();
 	public String getName();
 	public void delete();
+	public Class<?> getReturnType();
 	public IBlocks clone1();
 	public String toCode();
 	

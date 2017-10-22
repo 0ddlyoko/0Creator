@@ -25,7 +25,7 @@ public class BlocksMathUI extends InternalGUIFrame {
 	}
 
 	public BlocksMathUI(BlocksMath block, int x, int y, int width, int height) {
-		super(x, y, width, height);
+		super(block.getBlocksMathEnum().getVars().length, x, y, width, height);
 		this.block = block;
 	}
 
@@ -41,13 +41,14 @@ public class BlocksMathUI extends InternalGUIFrame {
 		int x = BlocksUI.SIZEROUND + 5 + getBlock().getComposantList()[0].getWidth()
 				+ getBlock().getComposantList()[1].getWidth() + 16;
 		for (int i = 0; i < bm.getBlocks().size(); i++) {
+			setLocation(i, x, 2);
 			if (bm.getBlocks().get(i) != null) {
 				BlocksUI.addGeneralPathFinalBlocks(path, x, 2,
 						bm.getBlocks().get(i).getInternalGUIFrame().getTotalWidth(),
 						bm.getBlocks().get(i).getInternalGUIFrame().getTotalHeight());
 				x += bm.getBlocks().get(i).getInternalGUIFrame().getTotalWidth() + 5;
 			} else {
-				BlocksUI.addGeneralPathFinalBlocks(path, x, 2, BlocksUI.SIZEROUND + 10, MINHEIGHT);
+				BlocksUI.addGeneralPathFinalBlocks(path, x, 2, BlocksUI.SIZEROUND + 10, 25);
 				x += BlocksUI.SIZEROUND + 10 + 5;
 			}
 		}

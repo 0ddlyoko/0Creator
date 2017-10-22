@@ -133,18 +133,31 @@ public class MainGUI extends JFrame implements MouseListener, MouseMotionListene
 
 			@Override
 			public void run() {
-				while (!end) {
-					repaint();
-				}
+				startPaint();
 			}
 		}).start();
 	}
 
-	/*
-	 * @Override public void paintComponents(Graphics g) { Graphics2D g2d =
-	 * (Graphics2D) g; // TODO: Ne sert a rien ? g2d.drawRoundRect(getX(),
-	 * getY(), getWidth(), getHeight(), 5, 5); }
-	 */
+	private void startPaint() {
+		long lastTime = System.nanoTime();
+		final double TICKS = 60D;
+		final double NS = 1000000000 / TICKS;
+		double delta = 0;
+		while (!end) {
+			long now = System.nanoTime();
+			delta += (now - lastTime) / NS;
+			lastTime = now;
+			if (delta >= 1) {
+				tick();
+				repaint();
+				delta--;
+			}
+		}
+	}
+
+	private void tick() {
+		project.getBlocksManager().updateAll();
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -173,14 +186,12 @@ public class MainGUI extends JFrame implements MouseListener, MouseMotionListene
 			} else if ("ABOUT_ABOUT".equalsIgnoreCase(cmd)) {
 				project.getGUIManager().showAboutGUI();
 			} else if ("RIGHTCLICK_DELETE".equalsIgnoreCase(cmd)) {
-				if (blockHover == null) {
+				if (blockHover == null)
 					return;
-				}
 				int n = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete all these blocks ?",
 						"Warning", JOptionPane.WARNING_MESSAGE, JOptionPane.YES_NO_OPTION);
-				if (n == JOptionPane.YES_OPTION) {
+				if (n == JOptionPane.YES_OPTION)
 					project.getBlocksManager().removeBlocks(blockHover);
-				}
 			} else if ("RIGHTCLICK_ABOUT".equalsIgnoreCase(cmd)) {
 
 			}
@@ -189,48 +200,52 @@ public class MainGUI extends JFrame implements MouseListener, MouseMotionListene
 
 	@Override
 	public void mouseDragged(MouseEvent e) { // TODO REWRITE THIS
+		int x = e.getX();
+		int y = e.getY();
 		if (blockHover != null) {
-			if (e.getX() >= 0 && e.getX() <= project.getGUIManager().getBlocksGUI().getPanelBlocks().getWidth()
-					&& e.getY() >= 0 && e.getY() <= project.getGUIManager().getBlocksGUI().getPanelBlocks().getHeight())
+			if (x >= 0 && x <= project.getGUIManager().getBlocksGUI().getPanelBlocks().getWidth() && y >= 0
+					&& y <= project.getGUIManager().getBlocksGUI().getPanelBlocks().getHeight())
 				return;
 			if (blockHover.getParent() != null)
 				blockHover.getParent().removeBlock(blockHover);
-			blockHover.move(e.getX(), e.getY());
+			blockHover.move(x, y);
 		}
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
+		int x = e.getX();
+		int y = e.getY();
 		if (blockHover != null) {
 			blockHover.setHover(false, 0, 0);
 			blockHover = null;
 		}
-		if (e.getX() >= 0 && e.getX() <= project.getGUIManager().getBlocksGUI().getPanelBlocks().getWidth()
-				&& e.getY() >= 0 && e.getY() <= project.getGUIManager().getBlocksGUI().getPanelBlocks().getHeight())
+		if (x >= 0 && x <= project.getGUIManager().getBlocksGUI().getPanelBlocks().getWidth() && y >= 0
+				&& y <= project.getGUIManager().getBlocksGUI().getPanelBlocks().getHeight())
 			return;
-		IBlocks b = getBlockAt(e.getX(), e.getY());
+		IBlocks b = getBlockAt(x, y);
 		if (b != null && b instanceof Block) {
 			blockHover = (Block) b;
-			blockHover.setHover(true, e.getX() - b.getInternalGUIFrame().getX(),
-					e.getY() - b.getInternalGUIFrame().getY());
+			blockHover.setHover(true, x - b.getInternalGUIFrame().getX(), y - b.getInternalGUIFrame().getY());
 			blockHover.onHover();
 		}
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
+		int x = e.getX();
+		int y = e.getY();
 		if (blockClicked != null) {
 			blockClicked.setClick(false, 0, 0);
 			blockClicked = null;
 		}
-		if (e.getX() >= 0 && e.getX() <= project.getGUIManager().getBlocksGUI().getPanelBlocks().getWidth()
-				&& e.getY() >= 0 && e.getY() <= project.getGUIManager().getBlocksGUI().getPanelBlocks().getHeight())
+		if (x >= 0 && x <= project.getGUIManager().getBlocksGUI().getPanelBlocks().getWidth() && y >= 0
+				&& y <= project.getGUIManager().getBlocksGUI().getPanelBlocks().getHeight())
 			return;
-		IBlocks b = getBlockAt(e.getX(), e.getY());
+		IBlocks b = getBlockAt(x, y);
 		if (b != null && b instanceof Block) {
 			blockClicked = (Block) b;
-			blockClicked.setClick(true, e.getX() - b.getInternalGUIFrame().getX(),
-					e.getY() - b.getInternalGUIFrame().getY());
+			blockClicked.setClick(true, x - b.getInternalGUIFrame().getX(), y - b.getInternalGUIFrame().getY());
 			blockClicked.onClick();
 			System.out.println("Click: " + blockClicked);
 		}
@@ -238,6 +253,8 @@ public class MainGUI extends JFrame implements MouseListener, MouseMotionListene
 
 	@Override
 	public void mousePressed(MouseEvent e) {
+		int x = e.getX();
+		int y = e.getY();
 		if (blockPressed != null) {
 			blockPressed.setPress(false, 0, 0);
 			blockPressed = null;
@@ -246,24 +263,24 @@ public class MainGUI extends JFrame implements MouseListener, MouseMotionListene
 			blockRightClicked.setPress(false, 0, 0);
 			blockRightClicked = null;
 		}
-		if (e.getX() >= 0 && e.getX() <= project.getGUIManager().getBlocksGUI().getPanelBlocks().getWidth()
-				&& e.getY() >= 0 && e.getY() <= project.getGUIManager().getBlocksGUI().getPanelBlocks().getHeight())
+		if (x >= 0 && x <= project.getGUIManager().getBlocksGUI().getPanelBlocks().getWidth() && y >= 0
+				&& y <= project.getGUIManager().getBlocksGUI().getPanelBlocks().getHeight())
 			return;
 		project.getGUIManager().getBlocksGUI().getPanelBlocks().setSeparator(null);
-		IBlocks b = getBlockAt(e.getX(), e.getY());
+		IBlocks b = getBlockAt(x, y);
 		if (b != null && b instanceof Block) {
 			blockPressed = (Block) b;
-			blockPressed.setPress(true, e.getX() - b.getInternalGUIFrame().getX(),
-					e.getY() - b.getInternalGUIFrame().getY());
+			blockPressed.setPress(true, x - b.getInternalGUIFrame().getX(), y - b.getInternalGUIFrame().getY());
 			blockPressed.onPress();
 			System.out.println("Pressed: " + blockPressed);
+			changeIndex(b);
 		}
 		if (e.isPopupTrigger()) {
 			if (b != null && b instanceof Block) {
 				// TODO CHANGE IT ???? I DON'T KNOW
 				blockRightClicked = (Block) b;
-				blockRightClicked.setRightClick(true, e.getX() - b.getInternalGUIFrame().getX(),
-						e.getY() - b.getInternalGUIFrame().getY());
+				blockRightClicked.setRightClick(true, x - b.getInternalGUIFrame().getX(),
+						y - b.getInternalGUIFrame().getY());
 				blockRightClicked.onRightClick();
 				System.out.println("Right Clicked: " + blockRightClicked);
 			}
@@ -291,17 +308,25 @@ public class MainGUI extends JFrame implements MouseListener, MouseMotionListene
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
+		int x = e.getX();
+		int y = e.getY();
 		if (blockPressed != null) {
 			blockPressed.setPress(false, 0, 0);
 			blockPressed = null;
 		}
+		IBlocks b = getBlockAt(x - 1, y - 1);
+		if (b != null && b != blockHover
+				&& b.canBlockAt(blockHover, x - b.getInternalGUIFrame().getX(), y - b.getInternalGUIFrame().getY())) {
+			b.setBlockAt(blockHover, x - b.getInternalGUIFrame().getX(), y - b.getInternalGUIFrame().getY());
+			return;
+		}
 		if (e.isPopupTrigger()) {
-			IBlocks b = getBlockAt(e.getX(), e.getY());
-			if (b != null && b instanceof Block) {
+			// IBlocks b2 = getBlockAt(x, y);
+			if (blockHover != null && blockHover instanceof Block) {
 				// TODO CHANGE IT ???? I DON'T KNOW
-				blockRightClicked = (Block) b;
-				blockRightClicked.setRightClick(true, e.getX() - b.getInternalGUIFrame().getX(),
-						e.getY() - b.getInternalGUIFrame().getY());
+				blockRightClicked = blockHover;
+				blockRightClicked.setRightClick(true, x - blockHover.getInternalGUIFrame().getX(),
+						y - blockHover.getInternalGUIFrame().getY());
 				blockRightClicked.onRightClick();
 				System.out.println("Right Clicked: " + blockRightClicked);
 			}
@@ -317,6 +342,13 @@ public class MainGUI extends JFrame implements MouseListener, MouseMotionListene
 	@Override
 	public void mouseExited(MouseEvent e) {
 		// Nothing to do here
+	}
+
+	public void changeIndex(IBlocks b) {
+		project.getGUIManager().getMainGUI().getContentPane().setComponentZOrder(b.getInternalGUIFrame(), 0);
+		for (IBlocks b2 : b.getBlocks())
+			if (b2 != null)
+				changeIndex(b2);
 	}
 
 	// RIGHT CLICK MENU

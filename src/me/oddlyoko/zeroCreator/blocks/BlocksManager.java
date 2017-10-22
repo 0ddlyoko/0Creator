@@ -1,6 +1,7 @@
 package me.oddlyoko.zeroCreator.blocks;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JOptionPane;
 
@@ -14,7 +15,7 @@ import me.oddlyoko.zeroCreator.blocks.mathblocks.BlocksMath;
 import me.oddlyoko.zeroCreator.blocks.mathblocks.BlocksMath.BlocksMathEnum;
 
 public class BlocksManager {
-	private ArrayList<IBlocks> blocks = new ArrayList<>();
+	private List<IBlocks> blocks = new ArrayList<>();
 	private Project project;
 
 	public BlocksManager(Project project) {
@@ -26,7 +27,7 @@ public class BlocksManager {
 
 	public void addBlock(IBlocks b) {
 		blocks.add(b);
-		project.getGUIManager().getMainGUI().getContentPane().add(b.getInternalGUIFrame());
+		project.getGUIManager().getMainGUI().getContentPane().add(b.getInternalGUIFrame(), 0);
 	}
 
 	public void removeBlock(IBlocks b) {
@@ -52,14 +53,17 @@ public class BlocksManager {
 		addBlock(be1);
 		BlocksIfElse bif1 = new BlocksIfElse(project);
 		BlocksIfElse bif11 = new BlocksIfElse(project);
+		BlocksIfElse bif12 = new BlocksIfElse(project);
 		BlocksIfElse bif2 = new BlocksIfElse(project);
 		BlocksIfElse bif3 = new BlocksIfElse(project);
 		addBlock(bif1);
 		addBlock(bif11);
+		addBlock(bif12);
 		addBlock(bif2);
 		addBlock(bif3);
 		be1.setChildren(bif1);
 		bif1.setIfChildren(bif11);
+		bif1.setElseChildren(bif12);
 		bif1.setElse(true);
 		bif1.setChildren(bif2);
 		bif2.setChildren(bif3);
@@ -97,21 +101,36 @@ public class BlocksManager {
 		addBlock(bf9);
 		addBlock(bf10);
 		addBlock(bf11);
-		BlocksMath bm = new BlocksMath(project, BlocksMathEnum.MAX);
+		bif1.setIfCond(bf1);
+		bif1.setElseCond(bf2);
+		BlocksMath bm = new BlocksMath(project, BlocksMathEnum.MAX, project.getGUIManager().getMainGUI().getWidth() / 2,
+				300);
 		bm.setNb(0, bf7);
 		bm.setNb(1, bf8);
 		bm.setNb(0, bf9);
-		BlocksMath bm2 = new BlocksMath(project, BlocksMathEnum.MIN);
+		BlocksMath bm2 = new BlocksMath(project, BlocksMathEnum.MIN,
+				project.getGUIManager().getMainGUI().getWidth() / 2, 350);
 		addBlock(bm);
 		addBlock(bm2);
 	}
 
+	private boolean isUpdate = false;
+
 	public void updateAll() {
-		for (IBlocks b : blocks)
-			b.updateAll();
+		if (isUpdate) {
+			return;
+		}
+		isUpdate = true;
+		try {
+			for (IBlocks b : blocks)
+				b.updateAll();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		isUpdate = false;
 	}
 
-	public ArrayList<IBlocks> getBlocks() {
+	public List<IBlocks> getBlocks() {
 		return blocks;
 	}
 }

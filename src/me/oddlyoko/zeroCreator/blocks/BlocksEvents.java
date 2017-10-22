@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.oddlyoko.zeroCreator.Project;
+import me.oddlyoko.zeroCreator.blocks.conditionblocks.BlocksIfElse;
 import me.oddlyoko.zeroCreator.blocks.customBlocks.IBlocksChildren;
 import me.oddlyoko.zeroCreator.composant.ComposantBasicText;
 import me.oddlyoko.zeroCreator.composant.IComposant;
@@ -28,7 +29,6 @@ public class BlocksEvents extends Block implements IBlocksChildren {
 		cbt.setY(2);
 		composants[0] = cbt;
 		internalGUIFrame = new BlocksEventUI(this, x, y);
-		project.getBlocksManager().updateAll();
 	}
 
 	@Override
@@ -41,15 +41,34 @@ public class BlocksEvents extends Block implements IBlocksChildren {
 		if (x == getInternalGUIFrame().getX() && y == getInternalGUIFrame().getY())
 			return;
 		getInternalGUIFrame().setLocation(x, y);
-		project.getBlocksManager().updateAll();
+	}
+
+	@Override
+	public boolean canBlockAt(IBlocks b, int x, int y) {
+		if (!(b instanceof BlocksIfElse))
+			return false;
+		if (b == this)
+			return false;
+		if (y >= getInternalGUIFrame().getHeight() - 20 && y <= getInternalGUIFrame().getHeight())
+			return true;
+		return false;
+	}
+
+	@Override
+	public void setBlockAt(IBlocks b, int x, int y) {
+		if (!(b instanceof BlocksIfElse))
+			return;
+		if (b == this)
+			return;
+		if (y >= getInternalGUIFrame().getHeight() - 20 && y <= getInternalGUIFrame().getHeight())
+			setChildren(b);
 	}
 
 	@Override
 	public void updateAll() {
-		if (getChildren() != null) {
+		if (getChildren() != null)
 			getChildren().move(getInternalGUIFrame().getX(),
 					getInternalGUIFrame().getY() + getInternalGUIFrame().getTotalHeight());
-		}
 	}
 
 	@Override
@@ -65,13 +84,11 @@ public class BlocksEvents extends Block implements IBlocksChildren {
 			getChildren().setParent(null);
 			setChildren(null);
 		}
-		project.getBlocksManager().updateAll();
 	}
 
 	@Override
 	public void delete() {
 		removeBlock(getChildren());
-		project.getBlocksManager().updateAll();
 	}
 
 	@Override
@@ -86,7 +103,6 @@ public class BlocksEvents extends Block implements IBlocksChildren {
 		this.children = b;
 		if (b != null)
 			b.setParent(this);
-		project.getBlocksManager().updateAll();
 	}
 
 	@Override
@@ -106,19 +122,17 @@ public class BlocksEvents extends Block implements IBlocksChildren {
 
 	@Override
 	public IBlocks clone1() {
-		BlocksEvents b = new BlocksEvents(project, "");
-		ComposantBasicText thisCbt = (ComposantBasicText) composants[0];
-		ComposantBasicText cbt = new ComposantBasicText(thisCbt.getText());
-		cbt.setX(thisCbt.getX());
-		cbt.setY(thisCbt.getY());
-		b.composants[0] = cbt;
-		// return b;
 		return new BlocksEvents(project, ((ComposantBasicText) composants[0]).getText());
 	}
 
 	@Override
 	public String toCode() {
 		// TODO END HERE
+		return null;
+	}
+
+	@Override
+	public Class<?> getReturnType() {
 		return null;
 	}
 }

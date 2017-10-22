@@ -2,10 +2,9 @@ package me.oddlyoko.zeroCreator.blocks.finalblocks;
 
 import me.oddlyoko.zeroCreator.Project;
 import me.oddlyoko.zeroCreator.blocks.IBlocks;
-import me.oddlyoko.zeroCreator.blocks.customBlocks.IBlockResultDouble;
 import me.oddlyoko.zeroCreator.composant.editable.ComposantEditableDouble;
 
-public class BlocksFinalDouble extends BlocksFinal implements IBlockResultDouble {
+public class BlocksFinalDouble extends BlocksFinal {
 	private final String NAME = "Final Double";
 
 	public BlocksFinalDouble(Project project, double defvalue) {
@@ -28,5 +27,10 @@ public class BlocksFinalDouble extends BlocksFinal implements IBlockResultDouble
 	@Override
 	public IBlocks clone1() {
 		return new BlocksFinalDouble(getProject(), ((Double) ((ComposantEditableDouble) getComposant(0)).getObject()));
+	}
+
+	@Override
+	public Class<?> getReturnType() {
+		return Double.class;
 	}
 }

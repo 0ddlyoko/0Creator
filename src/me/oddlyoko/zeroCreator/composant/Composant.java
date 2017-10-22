@@ -11,6 +11,11 @@ public abstract class Composant implements IComposant {
 		return ce;
 	}
 
+	public void event() {
+		if (ce != null)
+			ce.onEvent();
+	}
+
 	public interface ComposantEvent {
 		public void onEvent();
 	}

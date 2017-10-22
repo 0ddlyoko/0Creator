@@ -15,10 +15,10 @@ public class ZeroCreator {
 		if (ZeroCreator.project != null)
 			ZeroCreator.project.close();
 		ZeroCreator.project = project;
-		ZeroCreator.project.getGUIManager().showBlocksGUI();
-		ZeroCreator.project.getGUIManager().showMainGUI();
-		ZeroCreator.project.getBlocksManager().addAll();
-		ZeroCreator.project.getBlocksManager().updateAll();
+		project.getGUIManager().showBlocksGUI();
+		project.getGUIManager().showMainGUI();
+		project.getBlocksManager().addAll();
+		// ZeroCreator.project.getBlocksManager().updateAll();
 	}
 
 	public Project getProject() {

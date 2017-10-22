@@ -6,6 +6,7 @@ import java.util.List;
 import me.oddlyoko.zeroCreator.Project;
 import me.oddlyoko.zeroCreator.blocks.Block;
 import me.oddlyoko.zeroCreator.blocks.IBlocks;
+import me.oddlyoko.zeroCreator.blocks.customBlocks.IBlockResultType;
 import me.oddlyoko.zeroCreator.blocks.customBlocks.IBlocksChildren;
 import me.oddlyoko.zeroCreator.composant.ComposantBasicText;
 import me.oddlyoko.zeroCreator.composant.ComposantButton;
@@ -25,6 +26,8 @@ public class BlocksIfElse extends Block implements IBlocksChildren {
 
 	private IBlocks ifChildren = null;
 	private IBlocks elseChildren = null;
+	private IBlocks ifCond = null;
+	private IBlocks elseCond = null;
 
 	public BlocksIfElse(Project project) {
 		this(project, 20, 20);
@@ -42,7 +45,6 @@ public class BlocksIfElse extends Block implements IBlocksChildren {
 			@Override
 			public void execute(ComposantButtonClicked cbc) {
 				setElse(cbc.getNewActive());
-				move(internalGUIFrame.getX(), internalGUIFrame.getY());
 			}
 		});
 		cb.setX(5);
@@ -58,7 +60,6 @@ public class BlocksIfElse extends Block implements IBlocksChildren {
 		composants[1] = cb;
 		composants[2] = cbt2;
 		internalGUIFrame = new BlocksIfElseUI(this, x, y);
-		project.getBlocksManager().updateAll();
 	}
 
 	public IBlocks getIfChildren() {
@@ -73,14 +74,32 @@ public class BlocksIfElse extends Block implements IBlocksChildren {
 		this.ifChildren = ifChildren;
 		if (ifChildren != null)
 			ifChildren.setParent(this);
-		project.getBlocksManager().updateAll();
 	}
 
 	public void setElseChildren(IBlocks elseChildren) {
 		this.elseChildren = elseChildren;
 		if (elseChildren != null)
 			elseChildren.setParent(this);
-		project.getBlocksManager().updateAll();
+	}
+
+	public IBlocks getIfCond() {
+		return ifCond;
+	}
+
+	public IBlocks getElseCond() {
+		return elseCond;
+	}
+
+	public void setIfCond(IBlocks ifCond) {
+		this.ifCond = ifCond;
+		if (ifCond != null)
+			ifCond.setParent(this);
+	}
+
+	public void setElseCond(IBlocks elseCond) {
+		this.elseCond = elseCond;
+		if (elseCond != null)
+			elseCond.setParent(this);
 	}
 
 	@Override
@@ -95,7 +114,6 @@ public class BlocksIfElse extends Block implements IBlocksChildren {
 		this.children = b;
 		if (b != null)
 			b.setParent(this);
-		project.getBlocksManager().updateAll();
 	}
 
 	@Override
@@ -108,13 +126,87 @@ public class BlocksIfElse extends Block implements IBlocksChildren {
 		if (x == getInternalGUIFrame().getX() && y == getInternalGUIFrame().getY())
 			return;
 		getInternalGUIFrame().setLocation(x, y);
-		project.getBlocksManager().updateAll();
+	}
+
+	@Override
+	public boolean canBlockAt(IBlocks b, int x, int y) {
+		if (!(b instanceof BlocksIfElse) && !(b instanceof IBlockResultType))
+			return false;
+		if (b == this)
+			return false;
+		if (b instanceof BlocksIfElse) {
+			if (y >= getInternalGUIFrame().getTotalHeight() - 20 && y <= getInternalGUIFrame().getTotalHeight())
+				return true;
+			if (ifChildren == null && x >= getInternalGUIFrame().getLocation(1).getX()
+					&& y >= getInternalGUIFrame().getLocation(1).getY()
+					&& y <= getInternalGUIFrame().getLocation(1).getY() + 20)
+				return true;
+			if (hasElse()) {
+				if (elseChildren == null && x >= getInternalGUIFrame().getLocation(3).getX()
+						&& y >= getInternalGUIFrame().getLocation(3).getY()
+						&& y <= getInternalGUIFrame().getLocation(3).getY() + 20)
+					return true;
+			}
+		} else if (b instanceof IBlockResultType) {
+			if (ifCond == null && x >= getInternalGUIFrame().getLocation(0).getX()
+					&& x <= getInternalGUIFrame().getLocation(0).getX() + internalGUIFrame.getWidth()
+					&& y >= getInternalGUIFrame().getLocation(0).getY()
+					&& y <= getInternalGUIFrame().getLocation(0).getY() + internalGUIFrame.getHeight())
+				return true;
+			if (hasElse()) {
+				if (elseCond == null && x >= getInternalGUIFrame().getLocation(2).getX()
+						&& x <= getInternalGUIFrame().getLocation(2).getX() + internalGUIFrame.getWidth()
+						&& y >= getInternalGUIFrame().getLocation(2).getY()
+						&& y <= getInternalGUIFrame().getLocation(2).getY() + internalGUIFrame.getHeight())
+					return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public void setBlockAt(IBlocks b, int x, int y) {
+		if (!(b instanceof BlocksIfElse) && !(b instanceof IBlockResultType))
+			return;
+		if (b == this)
+			return;
+		if (b instanceof BlocksIfElse) {
+			if (y >= getInternalGUIFrame().getTotalHeight() - 20 && y <= getInternalGUIFrame().getTotalHeight())
+				setChildren(b);
+			if (ifChildren == null && x >= getInternalGUIFrame().getLocation(1).getX()
+					&& y >= getInternalGUIFrame().getLocation(1).getY()
+					&& y <= getInternalGUIFrame().getLocation(1).getY() + 20)
+				setIfChildren(b);
+			if (hasElse()) {
+				if (elseChildren == null && x >= getInternalGUIFrame().getLocation(3).getX()
+						&& y >= getInternalGUIFrame().getLocation(3).getY()
+						&& y <= getInternalGUIFrame().getLocation(3).getY() + 20)
+					setElseChildren(b);
+			}
+		} else if (b instanceof IBlockResultType) {
+			if (ifCond == null && x >= getInternalGUIFrame().getLocation(0).getX()
+					&& x <= getInternalGUIFrame().getLocation(0).getX() + internalGUIFrame.getWidth()
+					&& y >= getInternalGUIFrame().getLocation(0).getY()
+					&& y <= getInternalGUIFrame().getLocation(0).getY() + internalGUIFrame.getHeight())
+				setIfCond(b);
+			if (hasElse()) {
+				if (elseCond == null && x >= getInternalGUIFrame().getLocation(2).getX()
+						&& x <= getInternalGUIFrame().getLocation(2).getX() + internalGUIFrame.getWidth()
+						&& y >= getInternalGUIFrame().getLocation(2).getY()
+						&& y <= getInternalGUIFrame().getLocation(2).getY() + internalGUIFrame.getHeight())
+					setElseCond(b);
+			}
+		}
 	}
 
 	@Override
 	public void updateAll() {
 		if (ifChildren != null)
-			ifChildren.move(getInternalGUIFrame().getX() + 40, getInternalGUIFrame().getY() + 25);
+			ifChildren.move(getInternalGUIFrame().getX() + getInternalGUIFrame().getLocation(1).getX(),
+					getInternalGUIFrame().getY() + getInternalGUIFrame().getLocation(1).getY());
+		if (ifCond != null)
+			ifCond.move(getInternalGUIFrame().getX() + getInternalGUIFrame().getLocation(0).getX(),
+					getInternalGUIFrame().getY() + getInternalGUIFrame().getLocation(0).getY());
 		if (getChildren() != null)
 			getChildren().move(getInternalGUIFrame().getX(),
 					getInternalGUIFrame().getY() + getInternalGUIFrame().getTotalHeight());
@@ -123,13 +215,19 @@ public class BlocksIfElse extends Block implements IBlocksChildren {
 				elseChildren.setParent(null);
 				setElseChildren(null);
 			}
+			if (elseCond != null) {
+				elseCond.setParent(null);
+				setElseCond(null);
+			}
 			composants[2].setY(-1000);
 		} else {
 			if (elseChildren != null)
-				elseChildren.move(getInternalGUIFrame().getX() + 40, getInternalGUIFrame().getY()
-						+ (25 + 10 + Math.max(25, elseChildren.getInternalGUIFrame().getTotalHeightWithNextElement())));
-			composants[2].setY(25 + Math.max(35,
-					ifChildren == null ? 0 : ifChildren.getInternalGUIFrame().getTotalHeightWithNextElement()));
+				elseChildren.move(getInternalGUIFrame().getX() + getInternalGUIFrame().getLocation(3).getX(),
+						getInternalGUIFrame().getY() + getInternalGUIFrame().getLocation(3).getY());
+			if (elseCond != null)
+				elseCond.move(getInternalGUIFrame().getX() + getInternalGUIFrame().getLocation(2).getX(),
+						getInternalGUIFrame().getY() + getInternalGUIFrame().getLocation(2).getY());
+			composants[2].setY(getInternalGUIFrame().getLocation(2).getY());
 		}
 	}
 
@@ -138,6 +236,8 @@ public class BlocksIfElse extends Block implements IBlocksChildren {
 		List<IBlocks> list = new ArrayList<>();
 		list.add(ifChildren);
 		list.add(elseChildren);
+		list.add(ifCond);
+		list.add(elseCond);
 		list.add(getChildren());
 		return list;
 	}
@@ -152,22 +252,28 @@ public class BlocksIfElse extends Block implements IBlocksChildren {
 		} else if (elseChildren != null && elseChildren.equals(b)) {
 			elseChildren.setParent(null);
 			setElseChildren(null);
+		} else if (ifCond != null && ifCond.equals(b)) {
+			ifCond.setParent(null);
+			setIfCond(null);
+		} else if (elseCond != null && elseCond.equals(b)) {
+			elseCond.setParent(null);
+			setElseCond(null);
 		} else if (getChildren() != null && getChildren().equals(b)) {
 			getChildren().setParent(null);
 			setChildren(null);
 		} else if (getParent() != null)
 			getParent().removeBlock(this);
-		project.getBlocksManager().updateAll();
 	}
 
 	@Override
 	public void delete() {
 		removeBlock(ifChildren);
 		removeBlock(elseChildren);
+		removeBlock(ifCond);
+		removeBlock(elseCond);
 		removeBlock(getChildren());
 		if (getParent() != null)
 			getParent().removeBlock(this);
-		project.getBlocksManager().updateAll();
 	}
 
 	public boolean hasElse() {
@@ -176,7 +282,7 @@ public class BlocksIfElse extends Block implements IBlocksChildren {
 
 	public void setElse(boolean hasElse) {
 		this.hasElse = hasElse;
-		project.getBlocksManager().updateAll();
+		getInternalGUIFrame().setNbLocations((hasElse) ? 4 : 2);
 	}
 
 	@Override
@@ -197,6 +303,11 @@ public class BlocksIfElse extends Block implements IBlocksChildren {
 	@Override
 	public String toCode() {
 		// TODO END HERE
+		return null;
+	}
+
+	@Override
+	public Class<?> getReturnType() {
 		return null;
 	}
 }
